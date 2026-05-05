@@ -5,12 +5,8 @@ import { useDashboardLayout } from "@/components/layout-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Calendar, Check, Eye, LucideIcon } from "lucide-react";
-import {
-    updateTheme,
-    updateLayout,
-    DashboardLayoutType,
-    updateFont,
-} from "@/app/actions/profile";
+import { updateTheme, updateLayout, updateFont } from "@/app/actions/profile";
+import { DashboardLayoutType } from "@/types/profile";
 import { toast } from "sonner";
 import { Separator } from "../ui/separator";
 import { useFont, FontFamily } from "@/components/font-provider";
