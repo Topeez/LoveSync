@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updatePassword } from "@/app/actions/auth"; // Import action
+import { updatePassword } from "@/app/actions/auth";
 import { useTransition, useRef } from "react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";

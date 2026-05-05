@@ -30,7 +30,7 @@ export function UnpairButton({ coupleId }: { coupleId: string }) {
                 toast.success("Propojení bylo zrušeno.");
                 router.refresh();
             } else {
-                toast.error(result.message);
+                toast.error(result.error ?? "Nepodarilo se zrušit propojení.");
             }
         });
     };

@@ -24,7 +24,7 @@ export function DeleteAccount() {
         startTransition(async () => {
             const result = await deleteAccount();
             if (result && !result.success) {
-                toast.error(result.message);
+                toast.error(result.error ?? "Nepodarilo se smazat účet.");
             }
         });
     };
