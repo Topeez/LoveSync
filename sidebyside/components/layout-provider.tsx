@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { DashboardLayoutType } from "@/app/actions/profile";
+import { DashboardLayoutType } from "@/types/profile";
 
 type LayoutContextType = {
     layout: DashboardLayoutType;
