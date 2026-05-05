@@ -4,7 +4,7 @@ import { ThemeColorProvider } from "@/components/theme-color-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { createClient } from "@/utils/supabase/server";
 import { DashboardLayoutProvider } from "@/components/layout-provider";
-import { isValidLayout, DashboardLayoutType } from "../actions/profile";
+import { isValidLayout, DashboardLayoutType } from "@/types/profile";
 import { FontProvider, FontFamily } from "@/components/font-provider";
 
 const VALID_FONTS: FontFamily[] = ["geist", "inter", "nunito", "playfair"];
@@ -15,11 +15,13 @@ export default async function DashboardLayout({
     children: React.ReactNode;
 }) {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
 
     let initialTheme = "default";
     let initialLayout: DashboardLayoutType = "default";
-    let initialFont: FontFamily = "geist"; 
+    let initialFont: FontFamily = "geist";
 
     if (user) {
         const { data: profile } = await supabase
@@ -41,7 +43,12 @@ export default async function DashboardLayout({
 
     return (
         <section>
-            <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange={false} enableSystem>
+            <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                disableTransitionOnChange={false}
+                enableSystem
+            >
                 <FontProvider initialFont={initialFont}>
                     <ThemeColorProvider initialTheme={initialTheme}>
                         <Toaster />

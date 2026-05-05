@@ -6,6 +6,15 @@ import { sendNotificationToUser } from "./push";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { nanoid } from "nanoid";
+import { getPartnerId } from "@/lib/couple-utils";
+
+const MilestoneSchema = z.object({
+    title: z.string().min(1, "Název je povinný"),
+    description: z.string().optional(),
+    date: z.string().min(1, "Datum je povinné"),
+    icon: z.string().min(1),
+    coupleId: z.uuid(),
+});
 
 const BucketItemSchema = z.object({
   title: z.string().min(1, "Název je povinný"),
@@ -13,6 +22,34 @@ const BucketItemSchema = z.object({
     status: z.enum(["planned", "in_progress", "completed"]),
     coupleId: z.uuid(),
 })
+
+export async function updateRelationshipDate(coupleId: string, date: string){
+  const supabase = await createClient();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if(!user) return { success: false, error: "Nepřihlášen" }
+
+
+  const { data: couple } = await supabase
+  .from("couples")
+    .select("id")
+    .eq("id", coupleId)
+    .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
+    .maybeSingle();
+
+  if(!couple) return { success: false, error: "Nemáte oprávnění" }
+  
+  const { error } = await supabase
+  .from("couples")
+    .update({ relationship_start: date })
+    .eq("id", coupleId);
+
+  if(error) return { success: false, error: error.message };
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/settings");
+  return { success: true };
+}
 
 export async function updateCoverPhoto(coupleId: string, formData: FormData) {
     const imageFile = formData.get("cover") as File;
@@ -48,109 +85,89 @@ export async function updateCoverPhoto(coupleId: string, formData: FormData) {
 }
 
 export async function createMilestone(formData: FormData) {
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const date = formData.get("date") as string;
-  const icon = formData.get("icon") as string;
-  const coupleId = formData.get("coupleId") as string;
-
-  if(!title || !date || !icon || !coupleId) return;
-
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-  
-    const { error } = await supabase.from("milestones").insert({
-        title,
-        description,
-        date,
-        icon: icon || "star",
-        couple_id: coupleId
+const validated = MilestoneSchema.safeParse({
+        title: formData.get("title"),
+        description: formData.get("description"),
+        date: formData.get("date"),
+        icon: formData.get("icon"),
+        coupleId: formData.get("coupleId"),
     });
 
-    if (error) {
-        console.error("Error creating milestone:", error);
-        return;
+  if (!validated.success) {
+        return { success: false, message: validated.error.message };
     }
 
-        try {
-        const { data: couple } = await supabase.from("couples").select("user1_id, user2_id").eq("id", coupleId).single();
-        if (couple) {
-            const partnerId = couple.user1_id === user.id ? couple.user2_id : couple.user1_id;
-            if (partnerId) {
-                const fullName = user.user_metadata.full_name || "Partner";
-                await sendNotificationToUser(
-                    partnerId,
-                    "Nový milník! 🏆",
-                    `${fullName} přidal vzpomínku: ${title}`,
-                    "/dashboard/couple",
-                    "milestone"
-                );
-            }
-        }
-    } catch (e) { console.error("Push error:", e); }
+    const { title, description, date, icon, coupleId } = validated.data;
+
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false, message: "Nepřihlášen" };
+
+    const { error } = await supabase.from("milestones").insert({
+        title, description, date,
+        icon: icon || "star",
+        couple_id: coupleId,
+    });
+
+    if (error) return { success: false, message: "Chyba při ukládání" };
+
+    const partnerId = await getPartnerId(supabase, coupleId, user.id);
+    if (partnerId) {
+        const fullName = user.user_metadata.full_name || "Partner";
+        await sendNotificationToUser(
+            partnerId,
+            "Nový milník! 🏆",
+            `${fullName} přidal vzpomínku: ${title}`,
+            "/dashboard/couple",
+            "milestone",
+        );
+    }
 
     revalidatePath("/dashboard/couple");
+    return { success: true };
 }
 
 export async function createBucketItem(formData: FormData) {
-    const rawData = {
+    const validated = BucketItemSchema.safeParse({
         title: formData.get("title"),
         image_url: formData.get("image_url"),
         status: formData.get("status"),
         coupleId: formData.get("coupleId"),
-    };
+    });
 
-    // 1. Validace pomocí Zod
-    const validatedFields = BucketItemSchema.safeParse(rawData);
-
-    if (!validatedFields.success) {
-      // Vracíme první chybu
-      return { success: false, message: validatedFields.error.message };
+    if (!validated.success) {
+        return { success: false, message: validated.error.message };
     }
-    
-    const { title, image_url, status, coupleId } = validatedFields.data;
+
+    const { title, image_url, status, coupleId } = validated.data;
 
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false, message: "Nepřihlášen" };
 
-    if (!user) return { success: false, message: "Nejste přihlášen" };
-
-    // 2. Uložení do DB
     const { error } = await supabase.from("bucket_list_items").insert({
-        title,
-        status,
-        // Pokud je string prázdný, uložíme NULL, jinak URL
-        image_url: image_url || null, 
-        couple_id: coupleId
+        title, status,
+        image_url: image_url || null,
+        couple_id: coupleId,
     });
 
-    if (error) {
-        console.error("Error creating bucket item:", error);
-        return { success: false, message: "Chyba při ukládání do databáze" };
+    if (error) return { success: false, message: "Chyba při ukládání" };
+
+    const partnerId = await getPartnerId(supabase, coupleId, user.id);
+    if (partnerId) {
+        const fullName = user.user_metadata.full_name || "Partner";
+        await sendNotificationToUser(
+            partnerId,
+            "Nový sen do Bucket Listu ✨",
+            `${fullName} přidal: ${title}`,
+            "/dashboard/couple",
+            "bucket_item",
+        );
     }
 
-
-    try {
-        const { data: couple } = await supabase.from("couples").select("user1_id, user2_id").eq("id", coupleId).single();
-        if (couple) {
-            const partnerId = couple.user1_id === user.id ? couple.user2_id : couple.user1_id;
-            if (partnerId) {
-                const fullName = user.user_metadata.full_name || "Partner";
-                await sendNotificationToUser(
-                    partnerId,
-                    "Nový sen do Bucket Listu ✨",
-                    `${fullName} přidal: ${title}`,
-                    "/dashboard/couple",
-                    "bucket_item"
-                );
-            }
-        }
-    } catch (e) { console.error("Push error:", e); }
-
     revalidatePath("/dashboard/couple");
+    return { success: true };
 }
-
 export async function deleteBucketItem(itemId: string) {
     const supabase = await createClient();
     
@@ -209,38 +226,39 @@ export async function uncoupleUser(coupleId: string) {
 }
 
 export async function updateMood(mood: string) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { success: false };
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false };
 
-  const { data: couple } = await supabase
-    .from("couples")
-    .select("id, user1_id, user2_id")
-    .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
-    .single();
+    const { data: couple } = await supabase
+        .from("couples")
+        .select("id, user1_id, user2_id")
+        .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
+        .single();
 
-  if (!couple) return { success: false };
+    if (!couple) return { success: false };
 
-  const isUser1 = couple.user1_id === user.id;
-  const updateData = isUser1
-    ? { user1_mood: mood, user1_mood_updated_at: new Date().toISOString() }
-    : { user2_mood: mood, user2_mood_updated_at: new Date().toISOString() };
+    const isUser1 = couple.user1_id === user.id;
+    await supabase.from("couples").update(
+        isUser1
+            ? { user1_mood: mood, user1_mood_updated_at: new Date().toISOString() }
+            : { user2_mood: mood, user2_mood_updated_at: new Date().toISOString() }
+    ).eq("id", couple.id);
 
-  await supabase.from("couples").update(updateData).eq("id", couple.id);
+    // ← getPartnerId funguje i tady, couple.id je coupleId
+    const partnerId = await getPartnerId(supabase, couple.id, user.id);
+    if (partnerId) {
+        const fullName = user.user_metadata.full_name || "Partner";
+        await sendNotificationToUser(
+            partnerId,
+            "Nová nálada! 💭",
+            `${fullName} sdílel/a svou náladu: ${mood}`,
+            "/dashboard",
+        );
+    }
 
-  try {
-    const partnerId = isUser1 ? couple.user2_id : couple.user1_id;
-    const fullName = user.user_metadata.full_name || "Partner";
-    await sendNotificationToUser(
-      partnerId,
-      "Nová nálada! 💭",
-      `${fullName} sdílel/a svou náladu: ${mood}`,
-      "/dashboard"
-    );
-  } catch (e) { console.error("Push error:", e); }
-
-  revalidatePath("/dashboard");
-  return { success: true };
+    revalidatePath("/dashboard");
+    return { success: true };
 }
 
 export async function getOrCreateInviteCode(userId: string): Promise<string | null> {

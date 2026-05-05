@@ -3,10 +3,17 @@
 import Link from "next/link";
 import { CheckCircle2, Circle, PartyPopper } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ProfileData } from "@/types/profile";
 import InviteButton from "./dashboard/invite-button";
+import { useMemo } from "react";
 
 interface OnboardingChecklistProps {
     userProfile: ProfileData;
@@ -19,40 +26,53 @@ export function OnboardingChecklist({
     eventsCount,
     hasActiveCouple,
 }: OnboardingChecklistProps) {
-    const steps = [
-        {
-            id: "account",
-            label: "Vytvořit účet",
-            description: "Jsi členem SideBySide",
-            done: true,
-            href: null,
-            cta: null,
-        },
-        {
-            id: "profile",
-            label: "Vylepšit profil",
-            description: "Přidej si přezdívku nebo fotku",
-            done: !!(userProfile.nickname || userProfile.avatar_url),
-            href: `/dashboard/profile/${userProfile.id}`,
-            cta: "Upravit profil",
-        },
-        {
-            id: "partner",
-            label: "Pozvat polovičku",
-            description: "Ve dvou se to lépe táhne",
-            done: hasActiveCouple,
-            href: null,
-            cta: null,
-        },
-        {
-            id: "event",
-            label: "Naplánovat první rande",
-            description: "Přidej něco do kalendáře",
-            done: eventsCount > 0,
-            href: "/dashboard/",
-            cta: "Naplánovat akci",
-        },
-    ];
+    const steps = useMemo(
+        () => [
+            {
+                id: "account",
+                label: "Vytvořit účet",
+                description: "Jsi členem SideBySide",
+                done: true,
+                action: null,
+            },
+            {
+                id: "profile",
+                label: "Vylepšit profil",
+                description: "Přidej si přezdívku nebo fotku",
+                done: !!(userProfile.nickname || userProfile.avatar_url),
+                action: (
+                    <Link
+                        href={`/dashboard/profile/${userProfile.id}`}
+                        className="bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-full font-medium text-primary text-xs whitespace-nowrap transition-colors"
+                    >
+                        Upravit profil
+                    </Link>
+                ),
+            },
+            {
+                id: "partner",
+                label: "Pozvat polovičku",
+                description: "Ve dvou se to lépe táhne",
+                done: hasActiveCouple,
+                action: <InviteButton userId={userProfile.id} />,
+            },
+            {
+                id: "event",
+                label: "Naplánovat první rande",
+                description: "Přidej něco do kalendáře",
+                done: eventsCount > 0,
+                action: (
+                    <Link
+                        href="/dashboard/"
+                        className="bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-full font-medium text-primary text-xs whitespace-nowrap transition-colors"
+                    >
+                        Naplánovat akci
+                    </Link>
+                ),
+            },
+        ],
+        [userProfile, eventsCount, hasActiveCouple],
+    );
 
     const completedSteps = steps.filter((s) => s.done).length;
     const progress = (completedSteps / steps.length) * 100;
@@ -96,10 +116,13 @@ export function OnboardingChecklist({
                                 <Circle className="size-6 text-muted-foreground shrink-0" />
                             )}
                             <div className="flex flex-col">
-                                <span className={cn(
-                                    "font-medium text-sm",
-                                    step.done && "text-muted-foreground line-through decoration-muted-foreground/50",
-                                )}>
+                                <span
+                                    className={cn(
+                                        "font-medium text-sm",
+                                        step.done &&
+                                            "text-muted-foreground line-through decoration-muted-foreground/50",
+                                    )}
+                                >
                                     {step.label}
                                 </span>
                                 {!step.done && (
@@ -110,20 +133,7 @@ export function OnboardingChecklist({
                             </div>
                         </div>
 
-                        {/* Partner krok — InviteButton */}
-                        {step.id === "partner" && !step.done && (
-                            <InviteButton userId={userProfile.id} />
-                        )}
-
-                        {/* Ostatní kroky — Link */}
-                        {step.id !== "partner" && !step.done && step.href && (
-                            <Link
-                                href={step.href}
-                                className="bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-full font-medium text-primary text-xs whitespace-nowrap transition-colors"
-                            >
-                                {step.cta}
-                            </Link>
-                        )}
+                        {!step.done && step.action}
                     </div>
                 ))}
             </CardContent>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -16,40 +15,39 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import ActionButton from "../action-button";
 import { UnpairButton } from "./unpair-button";
+import { updateRelationshipDate } from "@/app/actions/couple";
+
+interface RelationshipFormProps {
+    coupleId: string;
+    initialDate: string | null;
+}
 
 export function RelationshipForm({
     coupleId,
     initialDate,
-}: {
-    coupleId: string;
-    initialDate: string | null;
-}) {
+}: RelationshipFormProps) {
     const [date, setDate] = useState<Date | undefined>(
         initialDate ? new Date(initialDate) : undefined,
     );
     const [loading, setLoading] = useState(false);
-    const supabase = createClient();
 
     const handleSave = async () => {
         if (!date) return;
         setLoading(true);
 
-        const formattedDate = format(date, "yyyy-MM-dd");
+        const result = await updateRelationshipDate(
+            coupleId,
+            format(date, "yyyy-MM-dd"),
+        );
 
-        const { error } = await supabase
-            .from("couples")
-            .update({ relationship_start: formattedDate })
-            .eq("id", coupleId);
-
-        if (error) {
-            toast.error("Chyba při ukládání výročí.");
-            console.error(error);
-        } else {
+        if (result.success) {
             toast.success("Výročí uloženo! ❤️");
+        } else {
+            toast.error("Chyba při ukládání výročí.");
         }
+
         setLoading(false);
     };
-
     return (
         <div className="space-y-4">
             <div className="flex flex-col space-y-2">

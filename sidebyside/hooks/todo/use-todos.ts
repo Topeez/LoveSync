@@ -59,16 +59,20 @@ export function useTodos(todos: Todo[], coupleId: string) {
     };
 
     const handleDelete = async (id: string) => {
-        startTransition(() =>
-            updateOptimisticTodos({ type: "DELETE", id }),
-        );
+      startTransition(() =>
+          updateOptimisticTodos({ type: "DELETE", id }),
+      );
 
-        try {
-            await deleteTodo(id);
-            toast.success("Úkol smazán.");
-        } catch {
-            toast.error("Nepodařilo se smazat úkol.");
-        }
+      try {
+          const result = await deleteTodo(id);
+          if (!result?.success) {
+              toast.error("Nemáte oprávnění smazat tento úkol.");
+          } else {
+              toast.success("Úkol smazán.");
+          }
+      } catch {
+          toast.error("Nepodařilo se smazat úkol.");
+      }
     };
 
     const completedCount = optimisticTodos.filter((t) => t.is_completed).length;

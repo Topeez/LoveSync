@@ -1,8 +1,15 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, MapPin, Plus } from "lucide-react";
 import { ClosestEventProps } from "@/types/event";
-import { AddEventDialog } from "./calendar/add-event-dialog";
 import ActionButton from "../action-button";
+import dynamic from "next/dynamic";
+
+const AddEventDialog = dynamic(
+    () => import("./calendar/add-event-dialog").then((m) => m.AddEventDialog),
+    { ssr: false },
+);
 
 export function ClosestEvent({
     nextEvent,

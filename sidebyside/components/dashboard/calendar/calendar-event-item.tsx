@@ -4,13 +4,19 @@ import { cn } from "@/lib/utils";
 import { MapPin, Gift, Trash2, Heart } from "lucide-react";
 import { getEventColor, getEventLabel } from "@/lib/event-types";
 import { CalendarItem } from "@/types/calendar";
+import { EditEventDialog } from "@/components/dashboard/calendar/edit-event-dialog";
 
 interface CalendarEventItemProps {
     event: CalendarItem;
     onDelete: (id: string) => void;
+    onUpdate: (updated: CalendarItem) => void;
 }
 
-export function CalendarEventItem({ event, onDelete }: CalendarEventItemProps) {
+export function CalendarEventItem({
+    event,
+    onDelete,
+    onUpdate,
+}: CalendarEventItemProps) {
     const start = new Date(event.start_time).toLocaleTimeString("cs-CZ", {
         hour: "2-digit",
         minute: "2-digit",
@@ -54,19 +60,25 @@ export function CalendarEventItem({ event, onDelete }: CalendarEventItemProps) {
                 </span>
 
                 <span className="bg-muted px-1.5 py-0.5 rounded font-mono text-[10px] text-muted-foreground">
-                    {isSpecial ? "CELÝ DEN" : `${start}${end ? ` - ${end}` : ""}`}
+                    {isSpecial
+                        ? "CELÝ DEN"
+                        : `${start}${end ? ` - ${end}` : ""}`}
                 </span>
 
-                <Trash2
-                    className={cn(
-                        "size-4 hover:text-destructive transition-colors cursor-pointer",
-                        (event.isOptimistic || isSpecial) && "invisible",
-                    )}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        if (!isSpecial) onDelete(event.id);
-                    }}
-                />
+                <div className="flex items-center gap-2">
+                    <EditEventDialog event={event} onUpdate={onUpdate} />
+
+                    <Trash2
+                        className={cn(
+                            "size-4 hover:text-destructive transition-colors cursor-pointer",
+                            (event.isOptimistic || isSpecial) && "invisible",
+                        )}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (!isSpecial) onDelete(event.id);
+                        }}
+                    />
+                </div>
             </div>
 
             {event.description && (
@@ -81,8 +93,12 @@ export function CalendarEventItem({ event, onDelete }: CalendarEventItemProps) {
                         <MapPin className="size-3" /> {event.location}
                     </>
                 )}
-                {event.is_birthday && <Gift className="size-3 text-yellow-600" />}
-                {event.is_anniversary && <Heart className="size-3 text-rose-500" />}
+                {event.is_birthday && (
+                    <Gift className="size-3 text-yellow-600" />
+                )}
+                {event.is_anniversary && (
+                    <Heart className="size-3 text-rose-500" />
+                )}
             </div>
         </div>
     );

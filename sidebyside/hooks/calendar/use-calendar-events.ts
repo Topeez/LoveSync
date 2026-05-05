@@ -33,6 +33,8 @@ export function useCalendarEvents({
         (state: Event[], action: OptimisticAction) => {
             if (action.type === "ADD")
                 return [...state, { ...action.event, isOptimistic: true }];
+            if(action.type === "UPDATE")
+                return state.map((e) => e.id === action.event.id ? action.event : e);
             if (action.type === "DELETE")
                 return state.filter((e) => e.id !== action.id);
             return state;
@@ -83,6 +85,12 @@ export function useCalendarEvents({
             toast.error("Nepodařilo se vytvořit událost.");
         }
     };
+
+    const handleUpdateEvent = async(updated: CalendarItem) => {
+      startTransition(() =>
+        updateOptimisticEvents({ type: "UPDATE", event: updated }),
+      )
+    }
 
     const handleDeleteEvent = async (eventId: string) => {
         startTransition(() =>
@@ -177,5 +185,5 @@ export function useCalendarEvents({
         }
     });
 
-    return { eventsMap, handleAddEvent, handleDeleteEvent };
+    return { eventsMap, handleAddEvent, handleUpdateEvent, handleDeleteEvent };
 }

@@ -4,8 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { ProfileSchema } from "@/lib/schemas";
 import { v4 as uuidv4 } from 'uuid';
-
-export type DashboardLayoutType = "default" | "focus" | "calendar";
+import { DashboardLayoutType } from "@/types/profile";
 
 
 export async function updateProfile(prevState: unknown, formData: FormData) {
@@ -90,22 +89,12 @@ export async function updateLayout(layout: DashboardLayoutType){
 
   const { error } = await supabase
   .from("profiles")
-  .update({ dashboard_layout: layout })
-  .eq("id", user.id);
+    .update({ dashboard_layout: layout })
+    .eq("id", user.id);
 
   if(error) throw new Error("Chyba při ukládání vzhledu");
 
   revalidatePath("/dashboard");
-}
-
-export async function isValidLayout(value: string | null | undefined): Promise<DashboardLayoutType | undefined> {
-    if (value === null || value === undefined) {
-    return undefined;
-  }
-  if (["default", "focus", "calendar"].includes(value)) {
-    return value as DashboardLayoutType;
-  }
-  return undefined;
 }
 
 export async function updateAvatar(formData: FormData) {
@@ -165,8 +154,15 @@ export async function updateNotificationPreferences(prefs: Record<string, boolea
 export async function updateFont(font: string) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) return { success: false };
 
-    await supabase.from("profiles").update({ font }).eq("id", user.id);
+    const { error } = await supabase
+        .from("profiles")
+        .update({ font })
+        .eq("id", user.id);
+
+    if (error) return { success: false };
+
     revalidatePath("/dashboard");
+    return { success: true };
 }

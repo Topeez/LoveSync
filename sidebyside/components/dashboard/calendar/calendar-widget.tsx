@@ -34,13 +34,14 @@ export function CalendarWidget({
     const [date, setDate] = useState<Date | undefined>(new Date());
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const { eventsMap, handleAddEvent, handleDeleteEvent } = useCalendarEvents({
-        events,
-        coupleId,
-        relationshipStart,
-        userProfile,
-        partnerProfile,
-    });
+    const { eventsMap, handleAddEvent, handleDeleteEvent, handleUpdateEvent } =
+        useCalendarEvents({
+            events,
+            coupleId,
+            relationshipStart,
+            userProfile,
+            partnerProfile,
+        });
 
     const handleDateSelect = (selectedDate: Date | undefined) => {
         setDate(selectedDate);
@@ -64,24 +65,34 @@ export function CalendarWidget({
                 locale={cs}
                 className="bg-card p-0 size-full"
                 classNames={{
-                    month: cn("flex flex-col items-center space-y-4 w-full", isCalendarLayout && "text-4xl"),
+                    month: cn(
+                        "flex flex-col items-center space-y-4 w-full",
+                        isCalendarLayout && "text-4xl",
+                    ),
                     month_grid: "w-full border-collapse",
                     weekdays: cn("flex my-2 w-full"),
-                    weekday: cn("rounded-xl w-full font-normal text-muted-foreground text-sm", isCalendarLayout && "md:text-xl"),
+                    weekday: cn(
+                        "rounded-xl w-full font-normal text-muted-foreground text-sm",
+                        isCalendarLayout && "md:text-xl",
+                    ),
                     week: "flex w-full mt-2",
                     day: cn(
-                      "flex flex-col justify-start items-center hover:bg-transparent! p-0 size-full font-normal text-foreground transition-colors",
-                      "m-0.5 sm:m-1 lg:m-2",
-                      isCalendarLayout && "lg:m-4",
-                      "rounded-xl!",
+                        "flex flex-col justify-start items-center hover:bg-transparent! p-0 size-full font-normal text-foreground transition-colors",
+                        "m-0.5 sm:m-1 lg:m-2",
+                        isCalendarLayout && "lg:m-4",
+                        "rounded-xl!",
                     ),
                     selected: "text-foreground",
                     today: "text-primary font-bold rounded-xl",
                     outside: "text-muted-foreground opacity-50",
                     disabled: "text-muted-foreground opacity-50",
                     hidden: "invisible",
-                    month_caption: "flex justify-center py-1 relative items-center mb-4",
-                    caption_label: cn("font-bold text-lg capitalize", isCalendarLayout && "md:text-2xl"),
+                    month_caption:
+                        "flex justify-center py-1 relative items-center mb-4",
+                    caption_label: cn(
+                        "font-bold text-lg capitalize",
+                        isCalendarLayout && "md:text-2xl",
+                    ),
                 }}
                 formatters={{
                     formatDay: (d) => {
@@ -123,6 +134,7 @@ export function CalendarWidget({
                                     key={event.id}
                                     event={event}
                                     onDelete={handleDeleteEvent}
+                                    onUpdate={handleUpdateEvent}
                                 />
                             ))
                         ) : (

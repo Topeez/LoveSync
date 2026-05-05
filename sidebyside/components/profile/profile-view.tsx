@@ -24,7 +24,11 @@ interface ProfileViewProps {
     hasCouple?: boolean;
 }
 
-export function ProfileView({ profile, isEditable, hasCouple }: ProfileViewProps) {
+export function ProfileView({
+    profile,
+    isEditable,
+    hasCouple,
+}: ProfileViewProps) {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
     const initials = profile.full_name
@@ -36,12 +40,10 @@ export function ProfileView({ profile, isEditable, hasCouple }: ProfileViewProps
               .slice(0, 2)
         : "JA";
 
-      
-
     return (
         <div className="space-y-4 cs-container">
             {/* --- HLAVIČKA A AKCE --- */}
-            <div className="flex md:flex-row flex-col justify-between items-end gap-4 shadow-sm mb-6 px-6 py-2">
+            <div className="flex md:flex-row-reverse flex-col justify-between items-end gap-4 shadow-sm mb-6 px-6 py-2">
                 {isEditable ? (
                     <div className="flex items-center gap-4">
                         <Button
@@ -53,12 +55,16 @@ export function ProfileView({ profile, isEditable, hasCouple }: ProfileViewProps
                                 Upravit údaje
                             </span>
                         </Button>
-                        <UserNav 
+                        <UserNav
                             id={(profile.id as string) || ""}
                             email={profile.email || ""}
-                            avatar_url={(profile.avatar_url as string) || undefined}
-                            full_name={profile.full_name || profile.nickname || ""}
-                            couple_id={hasCouple ? "has-couple" : undefined} 
+                            avatar_url={
+                                (profile.avatar_url as string) || undefined
+                            }
+                            full_name={
+                                profile.full_name || profile.nickname || ""
+                            }
+                            couple_id={hasCouple ? "has-couple" : undefined}
                         />
                     </div>
                 ) : (

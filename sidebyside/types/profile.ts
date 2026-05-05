@@ -21,3 +21,14 @@ export interface ProfileData {
   avatar_url?: string;
   couple_id?: string;
 }
+
+export type DashboardLayoutType = "default" | "focus" | "calendar";
+
+const VALID_LAYOUTS: DashboardLayoutType[] = ["default", "focus", "calendar"];
+
+export function isValidLayout(value: string | null | undefined): DashboardLayoutType | undefined {
+    if (!value) return undefined;
+    return VALID_LAYOUTS.includes(value as DashboardLayoutType)
+        ? (value as DashboardLayoutType)
+        : undefined;
+}

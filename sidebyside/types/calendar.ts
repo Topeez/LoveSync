@@ -21,4 +21,5 @@ export interface CalendarWidgetProps {
 
 export type OptimisticAction =
     | { type: "ADD"; event: Event }
-    | { type: "DELETE"; id: string };
+    | { type: "DELETE"; id: string }
+    | { type: "UPDATE"; event: Event };

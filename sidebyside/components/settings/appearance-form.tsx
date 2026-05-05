@@ -27,9 +27,9 @@ const colors: { value: ThemeColor; label: string; colorClass: string }[] = [
 ];
 
 const fonts: { value: FontFamily; label: string; preview: string }[] = [
-    { value: "geist",    label: "Geist",    preview: "Aa" },
-    { value: "inter",    label: "Inter",    preview: "Aa" },
-    { value: "nunito",   label: "Nunito",   preview: "Aa" },
+    { value: "geist", label: "Geist", preview: "Aa" },
+    { value: "inter", label: "Inter", preview: "Aa" },
+    { value: "nunito", label: "Nunito", preview: "Aa" },
     { value: "playfair", label: "Playfair", preview: "Aa" },
 ];
 
@@ -46,60 +46,51 @@ const layouts: {
 export function AppearanceForm() {
     const { themeColor, setThemeColor } = useThemeColor();
     const { layout, setLayout } = useDashboardLayout();
-
-    const handleThemeChange = async (newTheme: ThemeColor) => {
-        // 1. Optimistický update (okamžitá změna v UI)
-        setThemeColor(newTheme);
-
-        // 2. Uložení do DB
-        try {
-            await updateTheme(newTheme);
-            toast.success("Vzhled byl aktualizován");
-        } catch {
-            toast.error("Nepodařilo se uložit vzhled");
-        }
-    };
     const { font, setFont } = useFont();
 
-    const handleFontChange = async (newFont: FontFamily) => {
-        setFont(newFont);
+    async function handleSettingChange<T>(
+        setter: (v: T) => void,
+        saveFn: (v: T) => Promise<unknown>,
+        value: T,
+        successMsg: string,
+        errorMsg: string,
+    ) {
+        setter(value);
         try {
-            await updateFont(newFont);
-            toast.success("Font byl změněn");
+            await saveFn(value);
+            toast.success(successMsg);
         } catch {
-            toast.error("Nepodařilo se uložit font");
+            toast.error(errorMsg);
         }
-    };
-
-    const handleLayoutChange = async (newLayout: DashboardLayoutType) => {
-        setLayout(newLayout);
-        try {
-            await updateLayout(newLayout);
-            toast.success("Rozložení bylo aktualizováno");
-        } catch {
-            toast.error("Nepodařilo se uložit rozložení");
-        }
-    };
+    }
 
     return (
         <div className="space-y-4">
+            {/* Barevné schéma */}
             <div>
                 <h3 className="font-medium text-lg">Barevné schéma</h3>
                 <p className="text-muted-foreground text-sm">
                     Vyber si akcentovou barvu pro svůj dashboard.
                 </p>
             </div>
-
             <div className="gap-4 grid grid-cols-2 md:grid-cols-4 pt-2">
                 {colors.map((color) => (
                     <button
                         key={color.value}
+                        onClick={() =>
+                            handleSettingChange(
+                                setThemeColor,
+                                updateTheme,
+                                color.value,
+                                "Vzhled byl aktualizován",
+                                "Nepodařilo se uložit vzhled",
+                            )
+                        }
                         className={cn(
                             "relative flex flex-col justify-center items-center gap-3 bg-card hover:bg-accent/50 py-4 border border-input rounded-lg h-auto transition-all cursor-pointer",
                             themeColor === color.value &&
                                 "border-primary ring-1 ring-primary bg-accent/50",
                         )}
-                        onClick={() => handleThemeChange(color.value)}
                     >
                         <div
                             className={cn(
@@ -108,7 +99,6 @@ export function AppearanceForm() {
                             )}
                         />
                         <span className="font-medium">{color.label}</span>
-
                         {themeColor === color.value && (
                             <div className="top-2 right-2 absolute bg-background p-0.5 rounded-full text-primary">
                                 <Check className="size-3" />
@@ -120,42 +110,57 @@ export function AppearanceForm() {
 
             <Separator />
 
+            {/* Písmo */}
             <div className="space-y-4">
                 <div>
                     <h3 className="font-medium text-lg">Písmo</h3>
-                    <p className="text-muted-foreground text-sm">Vyber styl písma pro dashboard.</p>
+                    <p className="text-muted-foreground text-sm">
+                        Vyber styl písma pro dashboard.
+                    </p>
                 </div>
                 <div className="gap-3 grid grid-cols-2 md:grid-cols-4">
                     {fonts.map((f) => (
                         <button
                             key={f.value}
-                           
-                            onClick={() => handleFontChange(f.value)}
+                            onClick={() =>
+                                handleSettingChange(
+                                    setFont,
+                                    updateFont,
+                                    f.value,
+                                    "Font byl změněn",
+                                    "Nepodařilo se uložit font",
+                                )
+                            }
                             className={cn(
-                              "relative flex flex-col justify-center items-center gap-3 bg-card hover:bg-accent/50 py-4 border border-input rounded-lg h-auto transition-all cursor-pointer",
-                                font === f.value && "border-primary ring-1 ring-primary bg-accent/50"
+                                "relative flex flex-col justify-center items-center gap-3 bg-card hover:bg-accent/50 py-4 border border-input rounded-lg h-auto transition-all cursor-pointer",
+                                font === f.value &&
+                                    "border-primary ring-1 ring-primary bg-accent/50",
                             )}
                         >
                             <span
                                 className="font-bold text-2xl"
-                                style={{ fontFamily: `var(--font-${f.value === "geist" ? "geist-sans" : f.value})` }}
+                                style={{
+                                    fontFamily: `var(--font-${f.value === "geist" ? "geist-sans" : f.value})`,
+                                }}
                             >
                                 {f.preview}
                             </span>
-                            <span className="font-medium text-sm">{f.label}</span>
+                            <span className="font-medium text-sm">
+                                {f.label}
+                            </span>
                             {font === f.value && (
                                 <div className="top-2 right-2 absolute bg-background p-0.5 rounded-full text-primary">
                                     <Check className="size-3" />
                                 </div>
                             )}
-                        
                         </button>
                     ))}
                 </div>
             </div>
 
-            <Separator/>
+            <Separator />
 
+            {/* Rozložení */}
             <div className="space-y-4">
                 <div>
                     <h3 className="font-medium text-lg">
@@ -173,42 +178,22 @@ export function AppearanceForm() {
                         <Button
                             key={l.value}
                             variant="outline"
+                            onClick={() =>
+                                handleSettingChange(
+                                    setLayout,
+                                    updateLayout,
+                                    l.value,
+                                    "Rozložení bylo aktualizováno",
+                                    "Nepodařilo se uložit rozložení",
+                                )
+                            }
                             className={cn(
                                 "relative flex flex-col gap-4 hover:bg-accent/50 p-4 h-auto",
                                 layout === l.value &&
                                     "border-primary ring-1 ring-primary bg-accent/50",
                             )}
-                            onClick={() => handleLayoutChange(l.value)}
                         >
-                            <div className="gap-1 grid grid-cols-12 bg-muted p-2 rounded-md w-full aspect-video pointer-events-none">
-                                {l.value === "default" && (
-                                    <>
-                                        <div className="col-span-8 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
-                                    </>
-                                )}
-                                {l.value === "focus" && (
-                                    <>
-                                        <div className="col-span-6 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-6 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-8 row-span-2 bg-primary/30 border-2 border-primary/40 rounded-sm h-full" />
-                                        <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
-                                    </>
-                                )}
-                                {l.value === "calendar" && (
-                                    <>
-                                        <div className="col-span-8 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
-                                        <div className="col-span-8 row-span-2 bg-primary/30 border-2 border-primary/40 rounded-sm h-full" />
-                                        <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
-                                    </>
-                                )}
-                            </div>
+                            <LayoutPreview value={l.value} />
                             <div className="flex items-center gap-2">
                                 <l.icon className="size-4" />
                                 <span className="font-medium">{l.label}</span>
@@ -222,6 +207,44 @@ export function AppearanceForm() {
                     ))}
                 </div>
             </div>
+        </div>
+    );
+}
+
+const layoutBlocks: Record<DashboardLayoutType, React.ReactNode> = {
+    default: (
+        <>
+            <div className="col-span-8 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
+        </>
+    ),
+    focus: (
+        <>
+            <div className="col-span-6 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-6 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-8 row-span-2 bg-primary/30 border-2 border-primary/40 rounded-sm h-full" />
+            <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
+        </>
+    ),
+    calendar: (
+        <>
+            <div className="col-span-8 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
+            <div className="col-span-8 row-span-2 bg-primary/30 border-2 border-primary/40 rounded-sm h-full" />
+            <div className="col-span-4 bg-primary/30 rounded-sm h-full" />
+        </>
+    ),
+};
+
+function LayoutPreview({ value }: { value: DashboardLayoutType }) {
+    return (
+        <div className="gap-1 grid grid-cols-12 bg-muted p-2 rounded-md w-full aspect-video pointer-events-none">
+            {layoutBlocks[value]}
         </div>
     );
 }
