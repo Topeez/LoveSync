@@ -5,28 +5,26 @@ import { createTodo, toggleTodo, deleteTodo } from "@/app/actions/todos";
 import { toast } from "sonner";
 import { Todo, OptimisticTodoAction, TodoRow } from "@/types/todo";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
-import {createClient,} from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 export function useTodos(todos: Todo[], coupleId: string) {
-    const [optimisticTodos, updateOptimisticTodos] = useOptimistic(
-        todos ?? [],
-        (state: Todo[], action: OptimisticTodoAction): Todo[] => {
-            switch (action.type) {
-                case "ADD":
-                    return [...state, action.todo];
-                case "TOGGLE":
-                    return state.map((t) =>
-                        t.id === action.id
-                            ? { ...t, is_completed: action.checked }
-                            : t,
-                    );
-                case "DELETE":
-                    return state.filter((t) => t.id !== action.id);
-            }
-        },
-    );
+  const [optimisticTodos, updateOptimisticTodos] = useOptimistic(
+    todos ?? [],
+    (state: Todo[], action: OptimisticTodoAction): Todo[] => {
+      switch (action.type) {
+        case "ADD":
+          return [...state, action.todo];
+        case "TOGGLE":
+          return state.map((t) =>
+            t.id === action.id ? { ...t, is_completed: action.checked } : t,
+          );
+        case "DELETE":
+          return state.filter((t) => t.id !== action.id);
+      }
+    },
+  );
 
-     useEffect(() => {
+  useEffect(() => {
     if (!coupleId) return;
 
     const supabase = createClient();
@@ -84,67 +82,100 @@ export function useTodos(todos: Todo[], coupleId: string) {
     };
   }, [coupleId, updateOptimisticTodos]);
 
-    const handleAdd = async (formData: FormData) => {
-        const title = (formData.get("title") as string)?.trim();
-        if (!title) return;
+  const handleAdd = async (formData: FormData) => {
+    const title = (formData.get("title") as string)?.trim();
+    if (!title) return;
 
-        const optimisticTodo: Todo = {
-            id: Math.random().toString(),
-            title,
-            is_completed: false,
-            is_optimistic: true,
-        };
-
-        startTransition(() =>
-            updateOptimisticTodos({ type: "ADD", todo: optimisticTodo }),
-        );
-
-        try {
-            await createTodo(formData);
-        } catch {
-            toast.error("Nepodařilo se přidat úkol.");
-        }
+    const optimisticTodo: Todo = {
+      id: Math.random().toString(),
+      title,
+      is_completed: false,
+      is_optimistic: true,
     };
 
-    const handleToggle = async (id: string, checked: boolean) => {
+    startTransition(() =>
+      updateOptimisticTodos({ type: "ADD", todo: optimisticTodo }),
+    );
+
+    try {
+      const result = await createTodo(formData);
+
+      if (!result.success) {
         startTransition(() =>
-            updateOptimisticTodos({ type: "TOGGLE", id, checked }),
+          updateOptimisticTodos({ type: "DELETE", id: optimisticTodo.id }),
         );
-
-        try {
-            await toggleTodo(id, checked);
-        } catch {
-            toast.error("Nepodařilo se aktualizovat úkol.");
-        }
-    };
-
-    const handleDelete = async (id: string) => {
-      startTransition(() =>
-          updateOptimisticTodos({ type: "DELETE", id }),
-      );
-
-      try {
-          const result = await deleteTodo(id);
-          if (!result?.success) {
-              toast.error("Nemáte oprávnění smazat tento úkol.");
-          } else {
-              toast.success("Úkol smazán.");
-          }
-      } catch {
-          toast.error("Nepodařilo se smazat úkol.");
+        toast.error(result.error ?? "Nepodařilo se přidat úkol.");
       }
-    };
+    } catch {
+      startTransition(() =>
+        updateOptimisticTodos({ type: "DELETE", id: optimisticTodo.id }),
+      );
+      toast.error("Nepodařilo se přidat úkol.");
+    }
+  };
 
-    const completedCount = optimisticTodos.filter((t) => t.is_completed).length;
-    const totalCount = optimisticTodos.length;
+  const handleToggle = async (id: string, checked: boolean) => {
+    startTransition(() =>
+      updateOptimisticTodos({ type: "TOGGLE", id, checked }),
+    );
 
-    return {
-        optimisticTodos,
-        completedCount,
-        totalCount,
-        coupleId,
-        handleAdd,
-        handleToggle,
-        handleDelete,
-    };
+    try {
+      const result = await toggleTodo(id, checked);
+
+      if (!result.success) {
+        startTransition(() =>
+          updateOptimisticTodos({ type: "TOGGLE", id, checked: !checked }),
+        );
+        toast.error(result.error ?? "Nepodařilo se aktualizovat úkol.");
+      }
+    } catch {
+      startTransition(() =>
+        updateOptimisticTodos({ type: "TOGGLE", id, checked: !checked }),
+      );
+      toast.error("Nepodařilo se aktualizovat úkol.");
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const previous = optimisticTodos.find((t) => t.id === id);
+
+    startTransition(() =>
+      updateOptimisticTodos({ type: "DELETE", id }),
+    );
+
+    try {
+      const result = await deleteTodo(id);
+
+      if (!result.success) {
+        if (previous) {
+          startTransition(() =>
+            updateOptimisticTodos({ type: "ADD", todo: previous }),
+          );
+        }
+        toast.error(result.error ?? "Nemáte oprávnění smazat tento úkol.");
+      } else {
+        toast.success("Úkol smazán.");
+      }
+    } catch {
+      if (previous) {
+        startTransition(() =>
+          updateOptimisticTodos({ type: "ADD", todo: previous }),
+        );
+      }
+      toast.error("Nepodařilo se smazat úkol.");
+    }
+  };
+
+  const completedCount = optimisticTodos.filter((t) => t.is_completed).length;
+  const totalCount = optimisticTodos.length;
+
+  return {
+    optimisticTodos,
+    completedCount,
+    totalCount,
+    coupleId,
+    handleAdd,
+    handleToggle,
+    handleDelete,
+  };
 }
