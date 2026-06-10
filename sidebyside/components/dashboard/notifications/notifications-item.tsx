@@ -33,7 +33,7 @@ export function NotificationItem({
             <button
                 onClick={(e) => onDelete(e, notification.id)}
                 title="Smazat upozornění"
-                className="top-2 right-2 absolute opacity-0 group-hover:opacity-100 p-1 hover:text-destructive transition-all"
+                className="top-2 right-2 absolute p-1 hover:text-destructive transition-all"
             >
                 <Trash2 className="size-3.5" />
             </button>

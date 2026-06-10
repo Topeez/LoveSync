@@ -15,7 +15,7 @@ export function PageSkeleton({
 }: SkeletonProps) {
     return (
         <div className="space-y-6 p-4 md:p-8">
-            {/* 1. HEADER SKELETON */}
+            {/* HEADER */}
             <div className="flex justify-between items-center mb-8 px-6 w-full">
                 <div className="space-y-2 mt-2">
                     <Skeleton
@@ -32,22 +32,20 @@ export function PageSkeleton({
                     />
                 </div>
                 <div className="flex items-center gap-2">
-                    {/* Avatar a Theme toggle placeholder */}
-                    
                     <Skeleton className="rounded-full w-16 h-8" />
                     <Skeleton className="rounded-full size-8" />
                     <Skeleton className="rounded-full size-10" />
                 </div>
             </div>
 
-            {/* 2. GRID SKELETON */}
+            {/* GRID */}
             <div className="gap-4 grid grid-cols-12">
                 {cards.map((card, index) => (
                     <Card
                         key={index}
                         className={cn(
                             "col-span-12",
-                            card.colSpan || "md:col-span-4", // Default desktop
+                            card.colSpan || "md:col-span-4",
                             card.height || "h-full",
                         )}
                     >

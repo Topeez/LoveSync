@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, CheckCheck } from "lucide-react";
+import { Bell, CheckCheck, Trash2 } from "lucide-react";
 import {
     Popover,
     PopoverContent,
@@ -24,12 +24,17 @@ export function NotificationsBell({ userId }: NotificationsBellProps) {
         markAsRead,
         markAllAsRead,
         deleteNotification,
+        deleteAllNotifications,
     } = useNotifications(userId);
 
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative bg-accent shadow-md border border-muted rounded-full text-muted-foreground hover:text-foreground cursor-pointer">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative bg-accent shadow-md border border-muted rounded-full text-muted-foreground hover:text-foreground cursor-pointer"
+                >
                     <Bell className="size-4" />
                     {unreadCount > 0 && (
                         <span className="top-1 right-1 absolute flex justify-center items-center bg-primary rounded-full min-w-4 h-4 font-bold text-[10px] text-primary-foreground">
@@ -51,17 +56,30 @@ export function NotificationsBell({ userId }: NotificationsBellProps) {
                         )}
                     </div>
 
-                    {unreadCount > 0 && (
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="gap-1 h-7 text-xs"
-                            onClick={markAllAsRead}
-                        >
-                            <CheckCheck className="size-3.5" />
-                            Přečíst vše
-                        </Button>
-                    )}
+                    <div className="flex items-center gap-1">
+                        {unreadCount > 0 && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="gap-1 h-7 text-xs"
+                                onClick={markAllAsRead}
+                            >
+                                <CheckCheck className="size-3.5" />
+                                Přečíst vše
+                            </Button>
+                        )}
+                        {notifications.length > 0 && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="gap-1 h-7 text-destructive hover:text-destructive text-xs"
+                                onClick={deleteAllNotifications}
+                            >
+                                <Trash2 className="size-3.5" />
+                                Smazat vše
+                            </Button>
+                        )}
+                    </div>
                 </div>
 
                 {/* Seznam */}

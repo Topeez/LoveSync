@@ -28,11 +28,11 @@ export function CalendarEventItem({
           })
         : null;
 
-    const label = event.is_birthday
-        ? "Narozeniny"
-        : event.is_anniversary
-          ? "Výročí"
-          : getEventLabel(event.type ?? undefined);
+    // const label = event.is_birthday
+    //     ? "Narozeniny"
+    //     : event.is_anniversary
+    //       ? "Výročí"
+    //       : getEventLabel(event.type ?? undefined);
 
     const leftColor = event.is_birthday
         ? "#FFD700"
@@ -45,27 +45,35 @@ export function CalendarEventItem({
     return (
         <div
             className={cn(
-                "group flex flex-col gap-1 hover:bg-muted/50 p-3 border rounded-lg transition-all",
+                "group relative flex flex-col gap-1 hover:bg-muted/50 p-3 border rounded-lg overflow-hidden transition-all",
                 event.isOptimistic && "opacity-60 grayscale-[0.5]",
             )}
-            style={{ borderLeft: `4px solid ${leftColor}` }}
         >
+            {" "}
+            <span
+                className="top-0 bottom-0 left-0 absolute rounded-full w-1"
+                style={{
+                    backgroundColor: leftColor,
+                    boxShadow: isSpecial
+                        ? `0 0 12px 4px ${leftColor}`
+                        : `0 0 6px 1px ${leftColor}80`,
+                }}
+            />
             <div className="flex justify-between items-center">
                 <h3 className="font-semibold group-hover:text-primary text-sm transition-colors">
                     {event.title}
                 </h3>
-
-                <span className="block mb-1 font-bold text-muted-foreground text-xs uppercase tracking-wider">
+                {/* Mozna nekdy to vylepsim */}
+                {/* <span className="block mb-1 font-bold text-muted-foreground text-xs uppercase tracking-wider">
                     {label}
-                </span>
-
-                <span className="bg-muted px-1.5 py-0.5 rounded font-mono text-[10px] text-muted-foreground">
-                    {isSpecial
-                        ? "CELÝ DEN"
-                        : `${start}${end ? ` - ${end}` : ""}`}
-                </span>
+                </span> */}
 
                 <div className="flex items-center gap-2">
+                    <span className="bg-muted px-1.5 py-0.5 rounded font-mono text-[10px] text-muted-foreground">
+                        {isSpecial
+                            ? "CELÝ DEN"
+                            : `${start}${end ? ` - ${end}` : ""}`}
+                    </span>
                     <EditEventDialog event={event} onUpdate={onUpdate} />
 
                     <Trash2
@@ -80,13 +88,11 @@ export function CalendarEventItem({
                     />
                 </div>
             </div>
-
             {event.description && (
                 <p className="text-muted-foreground text-xs line-clamp-1">
                     {event.description}
                 </p>
             )}
-
             <div className="flex items-center gap-2 mt-1 text-muted-foreground text-xs">
                 {event.location && (
                     <>

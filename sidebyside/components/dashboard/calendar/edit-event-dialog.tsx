@@ -50,12 +50,13 @@ export function EditEventDialog({ event, onUpdate }: EditEventDialogProps) {
 
     const startDate = new Date(event.start_time);
     const endDate = event.end_time ? new Date(event.end_time) : undefined;
+    const isSpecial = event.is_birthday || event.is_anniversary;
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <button
-                    className="opacity-0 group-hover:opacity-100 p-1 hover:text-primary transition-all"
+                    className={`p-1 hover:text-primary ${isSpecial && "hidden"} transition-all cursor-pointer`}
                     title="Upravit událost"
                 >
                     <Pencil className="size-3.5" />

@@ -107,11 +107,22 @@ export function useNotifications(userId: string) {
         }
     };
 
+    const deleteAllNotifications = async () => {
+        await supabase
+            .from("notifications")
+            .delete()
+            .eq("user_id", userId);
+        
+        setNotifications([]);
+        setUnreadCount(0);
+    };
+
     return {
         notifications,
         unreadCount,
         markAsRead,
         markAllAsRead,
         deleteNotification,
+        deleteAllNotifications
     };
 }

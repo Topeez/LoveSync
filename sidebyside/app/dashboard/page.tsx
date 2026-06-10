@@ -32,19 +32,20 @@ export default async function DashboardPage() {
 
     // 1. Načteme Pár
     const { data: couple } = await supabase
-      .from("couples")
-      .select("*")
-      .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
-      .not("user2_id", "is", null)
-      .maybeSingle();
+        .from("couples")
+        .select("*")
+        .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
+        .not("user2_id", "is", null)
+        .maybeSingle();
 
     const { data: pendingCouple } = await supabase
-      .from("couples")
-      .select("invite_code")
-      .eq("user1_id", user.id)
-      .is("user2_id", null)
-      .maybeSingle();
+        .from("couples")
+        .select("invite_code")
+        .eq("user1_id", user.id)
+        .is("user2_id", null)
+        .maybeSingle();
 
+    const isUser1 = couple?.user1_id === user.id;
     let noteToDisplay = couple?.love_note || "";
 
     if (couple?.love_note_updated_at) {
@@ -78,8 +79,8 @@ export default async function DashboardPage() {
     if (couple && !pendingCouple && partnerProfile === null) {
         const partnerId =
             couple.user1_id === user.id ? couple.user2_id : couple.user1_id;
-        
-        // Pro jistotu přidáme kontrolu, že partnerId není null 
+
+        // Pro jistotu přidáme kontrolu, že partnerId není null
         // (kdyby náhodou byla v databázi anomálie)
         if (partnerId) {
             const { data: pData } = await supabase
@@ -126,78 +127,80 @@ export default async function DashboardPage() {
         events = allEventsData || [];
     }
 
-    const eventContent = couple && !pendingCouple ? (
-        <ClosestEvent
-            nextEvent={nextEvent}
-            hasCouple={!!couple}
-            coupleId={couple?.id}
-        />
-    ) : (
-        <Card className="inset-shadow-primary inset-shadow-xs col-span-12 md:col-span-8 bg-primary/15 border-none h-full">
-            <CardContent>
-                <div className="mb-2 font-bold text-foreground text-2xl">
-                    Naplánujte si něco hezkého se svou polovičkou.
-                </div>
-                <p className="mb-6 text-muted-foreground">
-                    Ale nejprv si ji/ho musíš přidat!
-                </p>
-                <div className="flex items-center gap-2 scale-90 origin-left">
-                    <InviteButton
-                        userId={user.id}
-                        className="bg-primary hover:bg-primary-foreground"
-                    />
-                    <span className="text-muted-foreground">
-                        Pozvi svou polovičku
-                    </span>
-                </div>
-            </CardContent>
-        </Card>
-    );
+    const eventContent =
+        couple && !pendingCouple ? (
+            <ClosestEvent
+                nextEvent={nextEvent}
+                hasCouple={!!couple}
+                coupleId={couple?.id}
+            />
+        ) : (
+            <Card className="inset-shadow-primary inset-shadow-xs col-span-12 md:col-span-8 bg-primary/15 border-none h-full">
+                <CardContent>
+                    <div className="mb-2 font-bold text-foreground text-2xl">
+                        Naplánujte si něco hezkého se svou polovičkou.
+                    </div>
+                    <p className="mb-6 text-muted-foreground">
+                        Ale nejprv si ji/ho musíš přidat!
+                    </p>
+                    <div className="flex items-center gap-2 scale-90 origin-left">
+                        <InviteButton
+                            userId={user.id}
+                            className="bg-primary hover:bg-primary-foreground"
+                        />
+                        <span className="text-muted-foreground">
+                            Pozvi svou polovičku
+                        </span>
+                    </div>
+                </CardContent>
+            </Card>
+        );
 
-    const noteContent = couple && !pendingCouple ? (
-        <LoveNoteCard
-            initialNote={noteToDisplay}
-            coupleId={couple.id}
-            authorId={couple.love_note_author_id}
-            currentUserId={user.id}
-        />
-    ) : (
-        <Card className="inset-shadow-secondary inset-shadow-xs col-span-12 md:col-span-3 lg:col-span-4 bg-secondary/15 border-none">
-            <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 font-medium text-secondary text-sm">
-                    <Heart className="fill-secondary size-4" />
-                    Love Note
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col justify-center h-24">
-                <p className="mb-3 text-muted-foreground text-xs">
-                    Tady si budete psát vzkazy.
-                </p>
-                <div className="flex items-center gap-2 scale-90 origin-left">
-                    <InviteButton userId={user.id} />
-                    <span className="text-muted-foreground">
-                        Pozvi svou polovičku
-                    </span>
-                </div>
-            </CardContent>
-        </Card>
-    );
+    const noteContent =
+        couple && !pendingCouple ? (
+            <LoveNoteCard
+                initialNote={noteToDisplay}
+                coupleId={couple.id}
+                authorId={couple.love_note_author_id}
+                currentUserId={user.id}
+            />
+        ) : (
+            <Card className="inset-shadow-secondary inset-shadow-xs col-span-12 md:col-span-3 lg:col-span-4 bg-secondary/15 border-none">
+                <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2 font-medium text-secondary text-sm">
+                        <Heart className="fill-secondary size-4" />
+                        Love Note
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col justify-center h-24">
+                    <p className="mb-3 text-muted-foreground text-xs">
+                        Tady si budete psát vzkazy.
+                    </p>
+                    <div className="flex items-center gap-2 scale-90 origin-left">
+                        <InviteButton userId={user.id} />
+                        <span className="text-muted-foreground">
+                            Pozvi svou polovičku
+                        </span>
+                    </div>
+                </CardContent>
+            </Card>
+        );
 
-
-    const todoContent = couple && !pendingCouple ? (
-        <TodoList todos={todos} coupleId={couple.id} />
-    ) : (
-        <Card className="inset-shadow-muted inset-shadow-xs col-span-12 md:col-span-4 border-none h-full">
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                    <ShoppingBag className="size-4" /> Úkoly
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="flex justify-center items-center h-48 text-muted-foreground">
-                Zatím jsi na to sám/sama.
-            </CardContent>
-        </Card>
-    );
+    const todoContent =
+        couple && !pendingCouple ? (
+            <TodoList todos={todos} coupleId={couple.id} />
+        ) : (
+            <Card className="inset-shadow-muted inset-shadow-xs col-span-12 md:col-span-4 border-none h-full">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                        <ShoppingBag className="size-4" /> Úkoly
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-center items-center h-48 text-muted-foreground">
+                    Zatím jsi na to sám/sama.
+                </CardContent>
+            </Card>
+        );
     const calendarContent = couple ? (
         <CalendarWidget
             events={events}
@@ -217,17 +220,18 @@ export default async function DashboardPage() {
         </Card>
     );
 
-    const profileContent = couple && !pendingCouple ? (
-        <CoupleProfileWidget
-            userProfile={userProfile}
-            partnerProfile={partnerProfile}
-            relationshipStart={couple?.relationship_start}
-        />
-    ) : (
-        <div className="flex justify-center items-center opacity-50 border border-dashed rounded-lg h-full text-muted-foreground text-xs">
-            Místo pro profil páru
-        </div>
-    );
+    const profileContent =
+        couple && !pendingCouple ? (
+            <CoupleProfileWidget
+                userProfile={userProfile}
+                partnerProfile={partnerProfile}
+                relationshipStart={couple?.relationship_start}
+            />
+        ) : (
+            <div className="flex justify-center items-center opacity-50 border border-dashed rounded-lg h-full text-muted-foreground text-xs">
+                Místo pro profil páru
+            </div>
+        );
 
     return (
         <div className="mx-auto p-4 md:p-8" suppressHydrationWarning>
@@ -240,7 +244,14 @@ export default async function DashboardPage() {
                         userProfile={{ ...userProfile, couple_id: null }}
                         hasActiveCouple={!!couple}
                         eventsCount={events.length}
-                        hasLoveNote={noteToDisplay.length > 0}
+                        hasLoveNote={
+                            !!(
+                                couple &&
+                                (isUser1
+                                    ? couple.user1_wrote_note
+                                    : couple.user2_wrote_note)
+                            )
+                        }
                     />
                 </div>
             )}
@@ -253,7 +264,6 @@ export default async function DashboardPage() {
                 todoSlot={todoContent}
                 calendarSlot={calendarContent}
                 profileSlot={profileContent}
-
             />
         </div>
     );

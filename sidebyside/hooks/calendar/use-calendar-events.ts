@@ -228,10 +228,10 @@ export function useCalendarEvents({
     });
   };
 
-  addBirthday(userProfile, "Moje narozeniny 🎂");
+  addBirthday(userProfile, "Moje narozeniny");
   addBirthday(
     partnerProfile,
-    `${partnerProfile?.nickname || "Partner"} má narozeniny 🎉`,
+    `${partnerProfile?.nickname || "Partner"} má narozeniny`,
   );
 
   // Výročí

@@ -16,12 +16,23 @@ export async function updateLoveNote(formData: FormData): Promise<ActionResult> 
 
     if (!user) return { success: false, error: "Nepřihlášen" };
 
+    const { data: couple } = await supabase
+        .from("couples")
+        .select("user1_id")
+        .eq("id", coupleId)
+        .single();
+
+    const isUser1 = couple?.user1_id === user.id;
+
     const { error } = await supabase
         .from("couples")
         .update({
             love_note: note,
-            love_note_author_id: user.id,
+            love_note_author_id: note ? user.id : null,
             love_note_updated_at: new Date().toISOString(),
+            ...(note.trim().length > 0 && {
+                [isUser1 ? "user1_wrote_note" : "user2_wrote_note"]: true,
+            }),
         })
         .eq("id", coupleId);
 

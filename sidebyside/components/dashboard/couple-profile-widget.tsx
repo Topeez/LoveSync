@@ -2,11 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Settings2, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import Link from "next/link";
 import { ProfileData } from "@/types/profile";
 import { differenceInDays } from "date-fns";
-import ActionButton from "../action-button";
 
 interface CoupleProfileWidgetProps {
     userProfile?: ProfileData | null;
@@ -24,30 +23,49 @@ export function CoupleProfileWidget({
         : null;
 
     return (
-        <Card className="@container relative inset-shadow-muted inset-shadow-xs flex flex-col justify-between shadow-lg border-none h-full overflow-hidden">
+        <Card className="relative inset-shadow-muted inset-shadow-xs flex flex-col justify-center shadow-lg border-none h-full overflow-hidden">
             <CardHeader>
                 <CardTitle className="text-lg">My dva</CardTitle>
             </CardHeader>
 
-            <CardContent className="flex flex-col gap-6">
-                <div className="flex flex-row xl:flex-row md:flex-col justify-between items-center gap-4">
+            <CardContent className="flex flex-col">
+                <div className="flex flex-row xl:flex-row md:flex-col items-center gap-4 size-full">
                     {/* JÁ */}
-                    <div className="flex flex-col items-center gap-2">
-                        <Avatar className="border-2 border-primary w-16 h-16">
-                            <AvatarImage
-                                src={userProfile?.avatar_url}
-                                className="object-cover"
-                                referrerPolicy="no-referrer"
-                                alt="your avatar image"
-                            />
-                            <AvatarFallback>JÁ</AvatarFallback>
-                        </Avatar>
+                    <div className="z-100 flex flex-col items-center gap-2">
+                        <Link
+                            href={`/dashboard/profile/${userProfile?.id}`}
+                            aria-label="partner profile link"
+                        >
+                            <Avatar className="border-2 border-primary size-16">
+                                <AvatarImage
+                                    src={userProfile?.avatar_url}
+                                    className="object-cover"
+                                    referrerPolicy="no-referrer"
+                                    alt="your avatar image"
+                                />
+                                <AvatarFallback>JÁ</AvatarFallback>
+                            </Avatar>
+                        </Link>
+                        <span className="font-medium text-muted-foreground text-sm">
+                            {userProfile?.nickname || userProfile?.full_name}
+                        </span>
                     </div>
 
-                    <div className="relative flex justify-center items-center min-w-28 sm:min-w-52 h-28 sm:h-52">
+                    <div className="z-10 relative flex flex-1 justify-center items-center min-w-28 sm:min-w-52 h-28 sm:h-52 animate-heart">
                         <Heart
-                            className="absolute size-28 @min-[350px]:size-52 text-red-500 transition-all"
+                            className="absolute opacity-50 dark:opacity-30 size-100 md:size-200 text-red-700 transition-all animate-heart"
                             strokeWidth={1}
+                            style={{ animationDelay: "0s" }}
+                        />
+                        <Heart
+                            className="absolute opacity-50 dark:opacity-30 size-70 md:size-150 text-red-500 transition-all animate-heart"
+                            strokeWidth={1}
+                            style={{ animationDelay: "0.15s" }}
+                        />
+                        <Heart
+                            className="absolute opacity-50 dark:opacity-30 size-50 md:size-110 text-red-300 transition-all animate-heart"
+                            strokeWidth={1}
+                            style={{ animationDelay: "0.3s" }}
                         />
 
                         {daysTogether !== null ? (
@@ -68,7 +86,7 @@ export function CoupleProfileWidget({
                     </div>
 
                     {/* PARTNER */}
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="z-100 flex flex-col items-center gap-2">
                         <Link
                             href={`/dashboard/profile/${partnerProfile?.id}`}
                             aria-label="partner profile link"
@@ -90,17 +108,6 @@ export function CoupleProfileWidget({
                     </div>
                 </div>
             </CardContent>
-            <div className="mx-auto px-4 md:px-0 w-full max-w-lg">
-                <Link href={`/dashboard/profile/${userProfile?.id}`}>
-                    <ActionButton
-                        variant="outline"
-                        className="gap-2 w-full text-foregroud"
-                    >
-                        <Settings2 className="size-4" />
-                        Upravit profil
-                    </ActionButton>
-                </Link>
-            </div>
         </Card>
     );
 }

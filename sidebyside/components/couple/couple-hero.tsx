@@ -2,13 +2,17 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { differenceInDays } from "date-fns";
 import { Heart, Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { updateCoverPhoto } from "@/app/actions/couple";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import imageCompression from "browser-image-compression";
+import {
+    differenceInDays,
+    differenceInMonths,
+    differenceInYears,
+} from "date-fns";
 
 interface CoupleHeroProps {
     couple: {
@@ -30,6 +34,8 @@ export default function CoupleHero({ couple, user1, user2 }: CoupleHeroProps) {
     const startDate = new Date(couple.relationship_start);
     const today = new Date();
     const daysTogether = differenceInDays(today, startDate);
+    const monthsTogether = differenceInMonths(today, startDate);
+    const yearsTogether = differenceInYears(today, startDate);
 
     const u1Init = user1.nickname[0] || "A";
     const u2Init = user2.nickname[0] || "B";
@@ -87,6 +93,24 @@ export default function CoupleHero({ couple, user1, user2 }: CoupleHeroProps) {
               borderRadius: "calc(var(--radius) + 12px)",
           }
         : { background: "linear-gradient(to right, #ec4899, #8b5cf6)" };
+
+    function formatDuration(days: number, months: number, years: number) {
+        if (years >= 1) {
+            if (years === 1) return `${years} rok`;
+            if (years >= 2 && years <= 4) return `${years} roky`;
+            return `${years} let`;
+        }
+
+        if (months >= 1) {
+            if (months === 1) return `${months} měsíc`;
+            if (months >= 2 && months <= 4) return `${months} měsíce`;
+            return `${months} měsíců`;
+        }
+
+        if (days === 1) return `${days} den`;
+        if (days >= 2 && days <= 4) return `${days} dny`;
+        return `${days} dní`;
+    }
 
     return (
         <div className="group relative col-span-12 shadow-xl mb-8 rounded-3xl w-full overflow-hidden">
@@ -164,7 +188,12 @@ export default function CoupleHero({ couple, user1, user2 }: CoupleHeroProps) {
                         variant="secondary"
                         className="bg-white/20 hover:bg-white/30 backdrop-blur-md px-3 py-1 border-none text-md text-white"
                     >
-                        Spolu {daysTogether} dní
+                        Spolu{" "}
+                        {formatDuration(
+                            daysTogether,
+                            monthsTogether,
+                            yearsTogether,
+                        )}
                     </Badge>
                     <Badge
                         variant="outline"

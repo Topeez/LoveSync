@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Pencil, Trash2 } from "lucide-react";
+import { Heart, Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState, useTransition, useRef } from "react";
 import { updateLoveNote } from "@/app/actions/update-note";
 import { Button } from "@/components/ui/button";
@@ -130,7 +130,7 @@ export function LoveNoteCard({
             <CardHeader className="pb-2">
                 <CardTitle className="flex justify-between items-center gap-2 font-medium text-secondary text-sm">
                     <div className="flex items-center gap-2">
-                        <Heart className="fill-current w-4 h-4" />
+                        <Heart className="fill-current size-4" />
                         {isMyNote ? "Tvůj vzkaz" : "Vzkaz pro tebe"}
                     </div>
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -176,10 +176,14 @@ export function LoveNoteCard({
                             variant="ghost"
                             size="icon"
                             onClick={() => setIsEditing((prev) => !prev)}
-                            className="hover:bg-transparent size-8 text-secondary hover:text-amber-400 cursor-pointer"
-                            title="Upravit vzkaz"
+                            className={`hover:bg-transparent size-8 text-secondary ${isEmpty ? "hover:text-green-400" : "hover:text-amber-400"} cursor-pointer`}
+                            title={isEmpty ? "Napsat vzkaz" : "Upravit vzkaz"}
                         >
-                            <Pencil className="size-4" />
+                            {isEmpty ? (
+                                <Plus className="size-4" />
+                            ) : (
+                                <Pencil className="size-4" />
+                            )}
                         </Button>
                     </div>
                 </CardTitle>

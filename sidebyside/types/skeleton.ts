@@ -1,14 +1,16 @@
-interface SkeletonCardConfig {
+import { ReactNode } from "react";
+
+export type SkeletonCardConfig = {
   colSpan?: string;
   height?: string;
   hasHeader?: boolean;
   hasFooter?: boolean;
   contentLines?: number;
-  customContent?: React.ReactNode;
-}
+  customContent?: ReactNode;
+};
 
-export interface SkeletonProps {
+export type SkeletonProps = {
   titleWidth?: string;
   subtitleWidth?: string;
   cards: SkeletonCardConfig[];
-}
+};
