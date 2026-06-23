@@ -17,6 +17,7 @@ import {
 import { format } from "date-fns";
 import { cs } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
+import { Switch } from "@/components/ui/switch";
 
 export interface EventFormInitialValues {
     title?: string;
@@ -46,6 +47,7 @@ export function EventForm({
     const [date, setDate] = useState<DateRange | undefined>(
         initialValues.dateRange,
     );
+    const [notifyBefore, setNotifyBefore] = useState<string | null>(null);
 
     const handleOpenChange = (open: boolean) => {
         if (open && !date) {
@@ -55,6 +57,17 @@ export function EventForm({
 
     const iconClasses =
         "top-2.5 left-2.5 absolute size-4 text-muted-foreground";
+
+    function formatNotifyBefore(minutes: string | null): string {
+        if (!minutes) return "";
+        const map: Record<string, string> = {
+            "15": "15 minut",
+            "30": "30 minut",
+            "60": "1 hodinu",
+            "1440": "1 den",
+        };
+        return map[minutes] ?? `${minutes} min`;
+    }
 
     return (
         <form action={onSubmit} className="space-y-4 pt-4">
@@ -169,6 +182,56 @@ export function EventForm({
                     />
                 </div>
             </div>
+
+            <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                    <Label htmlFor="notifyBefore">
+                        Připomenout akci{" "}
+                        {notifyBefore && (
+                            <span className="font-medium text-primary">
+                                {formatNotifyBefore(notifyBefore)}{" "}
+                            </span>
+                        )}
+                        předem
+                    </Label>
+                    <Switch
+                        checked={notifyBefore !== null}
+                        onCheckedChange={(checked) =>
+                            setNotifyBefore(checked ? "30" : null)
+                        }
+                    />
+                </div>
+
+                {notifyBefore !== null && (
+                    <div className="flex flex-wrap gap-2">
+                        {[
+                            { value: "15", label: "15 min" },
+                            { value: "30", label: "30 min" },
+                            { value: "60", label: "1 hodinu" },
+                            { value: "1440", label: "1 den" },
+                        ].map((opt) => (
+                            <button
+                                key={opt.value}
+                                type="button"
+                                onClick={() => setNotifyBefore(opt.value)}
+                                className={cn(
+                                    "px-3 py-1.5 border rounded-full text-sm transition-all",
+                                    notifyBefore === opt.value
+                                        ? "border-primary bg-primary/10 text-primary"
+                                        : "border-muted text-muted-foreground hover:bg-muted",
+                                )}
+                            >
+                                {opt.label}
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* hidden input pro FormData */}
+            {notifyBefore !== null && (
+                <input type="hidden" name="notifyBefore" value={notifyBefore} />
+            )}
 
             {/* Lokace */}
             <div className="space-y-1">

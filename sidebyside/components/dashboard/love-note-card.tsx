@@ -34,6 +34,7 @@ type CoupleRow = {
     id: string;
     love_note: string | null;
     love_note_author_id: string | null;
+    love_note_updated_at: string | null;
 };
 
 export function LoveNoteCard({
@@ -103,7 +104,22 @@ export function LoveNoteCard({
                     const newRow = payload.new as CoupleRow | null;
                     if (!newRow) return;
 
-                    setNote(newRow.love_note ?? "");
+                    let displayNote = newRow.love_note ?? "";
+                    if (newRow.love_note_updated_at) {
+                        const diffInHours =
+                            (Date.now() -
+                                new Date(
+                                    newRow.love_note_updated_at,
+                                ).getTime()) /
+                            (1000 * 60 * 60);
+                        if (diffInHours > 24) {
+                            displayNote = "";
+                        }
+                    } else {
+                        displayNote = "";
+                    }
+
+                    setNote(displayNote);
                     setAuthorIdState(newRow.love_note_author_id ?? "");
                 },
             )

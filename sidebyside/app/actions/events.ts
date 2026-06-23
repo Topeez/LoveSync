@@ -17,6 +17,8 @@ export async function createEvent(formData: FormData): Promise<ActionResult> {
   const startTimeStr = formData.get("startTime") as string;
   const endTimeStr = formData.get("endTime") as string;
 
+  const notifyBefore = formData.get("notifyBefore") as string;
+
   if (!title || !dateFrom || !startTimeStr) {
     return { success: false, error: "Chybí název nebo datum/čas události." };
   }
@@ -46,6 +48,7 @@ export async function createEvent(formData: FormData): Promise<ActionResult> {
     couple_id: coupleId,
     created_by: user.id,
     type: type || 'other',
+    notify_before: notifyBefore ? parseInt(notifyBefore as string): null,
   });
 
   if (error) {
