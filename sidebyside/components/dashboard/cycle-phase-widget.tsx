@@ -17,7 +17,6 @@ interface CyclePhaseWidgetProps {
 }
 
 export function CyclePhaseWidget({
-    userProfile,
     partnerProfile,
     cycle,
 }: CyclePhaseWidgetProps) {
