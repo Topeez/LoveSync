@@ -45,7 +45,7 @@ export function CycleSettingsSection() {
                             type="button"
                             variant="outline"
                             className={cn(
-                                "justify-start w-full md:w-70 font-normal text-left",
+                                "justify-start w-full md:w-70 font-normal text-foreground text-left",
                                 !lastPeriodStart && "text-muted-foreground",
                             )}
                         >

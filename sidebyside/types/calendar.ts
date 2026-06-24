@@ -17,6 +17,12 @@ export interface CalendarWidgetProps {
     relationshipStart?: string | Date | null;
     userProfile?: Profile | null;
     partnerProfile?: Profile | null;
+    cycle?: {
+        last_period_start: string;
+        cycle_length_days: number;
+        period_length_days: number;
+        sharing_mode: string;
+    } | null;
 }
 
 export type OptimisticAction =

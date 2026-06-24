@@ -50,8 +50,6 @@ export function ProfileForm({ profile }: { profile: Profile }) {
         (profile.avatar_url as string) || undefined,
     );
 
-    // const [confirmOpen, setConfirmOpen] = useState(false);
-
     const initials =
         profile.full_name
             ?.split(" ")
@@ -159,7 +157,7 @@ export function ProfileForm({ profile }: { profile: Profile }) {
                             {isUploading ? (
                                 <Loader2 className="size-3.5 animate-spin" />
                             ) : (
-                                <Camera className="size-3.5" />
+                                <Camera className="size-3.5 text-white" />
                             )}
                         </ActionButton>
                         <Input
@@ -179,7 +177,7 @@ export function ProfileForm({ profile }: { profile: Profile }) {
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
                             disabled={isUploading}
-                            className="disabled:opacity-50 mt-1 text-foreground text-xs"
+                            className="disabled:opacity-50 mt-1 text-white text-xs"
                         >
                             Změnit fotku
                         </ActionButton>
@@ -222,7 +220,7 @@ export function ProfileForm({ profile }: { profile: Profile }) {
                                 type="button"
                                 variant="outline"
                                 className={cn(
-                                    "justify-start w-full md:w-70 font-normal text-left",
+                                    "justify-start w-full md:w-70 font-normal text-foreground text-left",
                                     !birthDate && "text-muted-foreground",
                                 )}
                             >
@@ -299,31 +297,6 @@ export function ProfileForm({ profile }: { profile: Profile }) {
                     </ActionButton>
                 </div>
             </form>
-
-            {/* <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Neuložené změny</DialogTitle>
-                    </DialogHeader>
-                    <p className="mb-4 text-muted-foreground text-sm">
-                        Máš neuložené změny. Opravdu chceš odejít bez uložení?
-                    </p>
-                    <DialogFooter className="flex justify-end gap-2">
-                        <ActionButton
-                            variant="outline"
-                            onClick={() => setConfirmOpen(false)}
-                        >
-                            Zůstat
-                        </ActionButton>
-                        <ActionButton
-                            variant="destructive"
-                            onClick={confirmLeave}
-                        >
-                            Odejít bez uložení
-                        </ActionButton>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog> */}
         </>
     );
 }

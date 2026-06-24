@@ -21,6 +21,8 @@ import { CalendarWidgetProps } from "@/types/calendar";
 import { useCalendarEvents } from "@/hooks/calendar/use-calendar-events";
 import { CalendarDayCell } from "./calendar-day-cell";
 import { CalendarEventItem } from "./calendar-event-item";
+import { getCyclePhase } from "@/lib/cycle";
+import type { CyclePhase } from "@/lib/cycle";
 
 export function CalendarWidget({
     events = [],
@@ -28,6 +30,7 @@ export function CalendarWidget({
     relationshipStart,
     userProfile,
     partnerProfile,
+    cycle,
 }: CalendarWidgetProps) {
     const { layout } = useDashboardLayout();
     const isCalendarLayout = layout === "calendar";
@@ -98,11 +101,22 @@ export function CalendarWidget({
                     formatDay: (d) => {
                         const dateKey = format(d, "yyyy-MM-dd");
                         const dayEvents = eventsMap[dateKey] ?? [];
+
+                        const cyclePhase =
+                            cycle && cycle.last_period_start
+                                ? getCyclePhase(
+                                      d,
+                                      new Date(cycle.last_period_start),
+                                      cycle.cycle_length_days,
+                                      cycle.period_length_days,
+                                  )
+                                : null;
                         return (
                             <CalendarDayCell
                                 date={d}
                                 dayEvents={dayEvents}
                                 isCalendarLayout={isCalendarLayout}
+                                cyclePhase={cyclePhase}
                             />
                         ) as never;
                     },

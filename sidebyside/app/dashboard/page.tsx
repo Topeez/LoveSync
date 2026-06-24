@@ -67,6 +67,7 @@ export default async function DashboardPage() {
     // 2. Načteme Profily
     let userProfile = null;
     let partnerProfile = null;
+    let partnerCycle = null;
 
     // Můj profil
     const { data: myProfileData } = await supabase
@@ -75,6 +76,14 @@ export default async function DashboardPage() {
         .eq("id", user.id)
         .single();
     userProfile = myProfileData;
+
+    const { data: myCycle } = await supabase
+        .from("cycle_tracking")
+        .select(
+            "last_period_start, cycle_length_days, period_length_days, sharing_mode",
+        )
+        .eq("user_id", user.id)
+        .maybeSingle();
 
     // Partnerův profil (pokud existuje pár)
     if (couple && !pendingCouple && partnerProfile === null) {
@@ -90,6 +99,20 @@ export default async function DashboardPage() {
                 .eq("id", partnerId)
                 .single();
             partnerProfile = pData;
+
+            if (partnerProfile?.gender === "female") {
+                const { data: cycleRow } = await supabase
+                    .from("cycle_tracking")
+                    .select(
+                        "last_period_start, cycle_length_days, period_length_days, sharing_mode",
+                    )
+                    .eq("user_id", partnerId)
+                    .maybeSingle();
+
+                if (cycleRow?.sharing_mode === "share_phase_with_partner") {
+                    partnerCycle = cycleRow;
+                }
+            }
         }
     }
 
@@ -221,6 +244,9 @@ export default async function DashboardPage() {
                 </CardContent>
             </Card>
         );
+
+    const isUserFemale = userProfile?.gender === "female";
+
     const calendarContent = couple ? (
         <CalendarWidget
             events={events}
@@ -228,6 +254,7 @@ export default async function DashboardPage() {
             userProfile={userProfile}
             relationshipStart={couple?.relationship_start}
             partnerProfile={partnerProfile}
+            cycle={isUserFemale ? myCycle : null}
         />
     ) : (
         <Card className="inset-shadow-muted inset-shadow-xs bg-card border-none h-full">
@@ -253,19 +280,23 @@ export default async function DashboardPage() {
             </div>
         );
 
+    const showCycleWidgetForCurrentUser =
+        !!partnerProfile && partnerProfile.gender === "female";
+
     const cycleContent =
-        (couple ?? !pendingCouple) ? (
+        couple && !pendingCouple && showCycleWidgetForCurrentUser ? (
             <CyclePhaseWidget
                 user={user}
                 userProfile={userProfile}
                 partnerProfile={partnerProfile}
-                cycle={cycleData}
+                cycle={partnerCycle}
             />
         ) : (
             <Card className="col-span-12 bg-muted/40 border-none h-full">
                 <CardContent className="flex justify-center items-center h-24 text-muted-foreground text-sm">
-                    Zdraví a cyklus se objeví po spárování a nastavení u
-                    partnerky
+                    {showCycleWidgetForCurrentUser
+                        ? "Až partnerka nastaví sdílení cyklu, uvidíš tady přehled fází."
+                        : "Zdraví & cyklus je dostupný jen pro partnerku."}
                 </CardContent>
             </Card>
         );
