@@ -43,7 +43,7 @@ export async function createTodo(formData: FormData): Promise<ActionResult> {
         coupleId,
         fullName,
         userId: user.id,
-        title: "Nový úkol 📝",
+        title: "Nový úkol",
         message: `${fullName} přidal(a): ${title}`,
         type: "todos",
     });
@@ -79,7 +79,7 @@ export async function toggleTodo(todoId: string, isCompleted: boolean): Promise<
             fullName,
             coupleId: todo.couple_id,
             userId: user.id,
-            title: "Úkol splněn! ✅",
+            title: "Úkol splněn!",
             message: `${fullName} splnil(a): ${todo.title}`,
             type: "todos",
         });

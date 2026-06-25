@@ -23,7 +23,7 @@ export default async function InvitePage({
     if (!user) {
         return (
             <div className="flex flex-col justify-center items-center p-4 min-h-screen text-center">
-                <h1 className="mb-4 font-bold text-2xl">Skoro tam! 💑</h1>
+                <h1 className="mb-4 font-bold text-2xl">Skoro tam!</h1>
                 <p className="mb-8 text-stone-600">
                     Pro přijetí pozvánky se musíš přihlásit.
                 </p>
@@ -38,7 +38,7 @@ export default async function InvitePage({
         return (
             <div className="flex justify-center items-center min-h-screen">
                 <p>
-                    Nemůžeš pozvat sám sebe, blázínku! 😄{" "}
+                    Nemůžeš pozvat sám sebe, blázínku!{" "}
                     <Link href="/dashboard" className="underline">
                         Zpět
                     </Link>

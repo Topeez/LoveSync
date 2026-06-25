@@ -63,7 +63,7 @@ export function PasswordForm() {
                 />
             </div>
 
-            <div className="flex justify-end pt-2">
+            <div className="flex justify-start pt-2">
                 <ActionButton type="submit" disabled={isPending}>
                     {isPending && (
                         <Loader2 className="mr-2 size-4 animate-spin" />

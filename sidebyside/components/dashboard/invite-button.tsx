@@ -20,7 +20,6 @@ export default function InviteButton({
     const handleCopyInvite = async () => {
         setLoading(true);
         try {
-            // ✅ Načte nebo vytvoří invite kód z DB
             const code = await getOrCreateInviteCode(userId);
             if (!code) throw new Error("Nepodařilo se získat kód");
 

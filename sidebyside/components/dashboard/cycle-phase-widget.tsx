@@ -42,7 +42,7 @@ const phaseConfig: Record<CyclePhase, PhaseConfig> = {
         label: "Menstruace",
         Icon: MoonStar,
         description: "Čas na klid a odpočinek. Tělo pracuje tvrdě.",
-        tip: "Dnes by ocenil/a teplo, pohodu a třeba horkou čokoládu místo rande venku.",
+        tip: "Dnes by ocenila teplo, pohodu a třeba horkou čokoládu místo rande venku.",
         bgClass: "bg-rose-500/10",
         textClass: "text-rose-400",
         dotClass: "bg-rose-400",
@@ -82,7 +82,7 @@ const phaseConfig: Record<CyclePhase, PhaseConfig> = {
         label: "PMS",
         Icon: CloudLightning,
         description: "Emoce na vlnách. Tělo se připravuje na nový cyklus.",
-        tip: "Buď trpělivý/á, netlač, nebav se o zbytečnostech. Objetí > debata.",
+        tip: "Buď trpělivý, netlač, nebav se o zbytečnostech. Objetí > debata.",
         bgClass: "bg-purple-500/10",
         textClass: "text-purple-400",
         dotClass: "bg-purple-400",
@@ -110,7 +110,6 @@ export function CyclePhaseWidget({
         return (
             <Card className="inset-shadow-muted inset-shadow-xs bg-card border-none">
                 <CardContent className="flex items-center gap-4 py-6">
-                    <span className="text-3xl">💝</span>
                     <div>
                         <p className="font-medium text-sm">Cyklus partnerky</p>
                         <p className="mt-0.5 text-muted-foreground text-xs">

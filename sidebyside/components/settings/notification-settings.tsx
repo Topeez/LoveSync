@@ -14,7 +14,7 @@ export function NotificationSettings({
     const [isPushEnabled, setIsPushEnabled] = useState(false);
 
     return (
-        <div className="space-y-4 p-6 border rounded-lg">
+        <div className="space-y-4">
             <PushNotificationManager onSubscriptionChange={setIsPushEnabled} />
 
             <div className="pt-4 border-t">

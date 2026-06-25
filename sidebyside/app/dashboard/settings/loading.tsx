@@ -12,7 +12,7 @@ export default function SettingsLoading() {
             </div>
             <Separator />
 
-            <Skeleton className="rounded-md w-96 h-8" />
+            <Skeleton className="rounded-md w-full h-8" />
         </div>
     );
 }

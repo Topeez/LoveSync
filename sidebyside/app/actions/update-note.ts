@@ -50,7 +50,7 @@ export async function updateLoveNote(formData: FormData): Promise<ActionResult> 
             coupleId,
             fullName,
             userId: user.id,
-            title: "Nový vzkaz ❤️",
+            title: "Nový vzkaz",
             message: `${fullName} ti nechal(a) vzkaz: "${preview}"`,
             type: "love_note",
         });

@@ -21,12 +21,13 @@ export function PartnerCard({
     birth_date,
     love_language,
 }: PartnerCardProps) {
-    const initials = full_name
-        ?.split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2) ?? "??";
+    const initials =
+        full_name
+            ?.split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+            .slice(0, 2) ?? "??";
 
     const age = birth_date
         ? differenceInYears(new Date(), new Date(birth_date))
@@ -37,18 +38,25 @@ export function PartnerCard({
         : null;
 
     return (
-        <div className="flex sm:flex-row flex-col gap-5 bg-muted/40 p-5 border rounded-xl">
+        <div className="flex sm:flex-row flex-col gap-5 bg-muted/40 mx-auto p-5 border rounded-xl w-full">
             <div className="flex flex-col items-center gap-2 min-w-20">
                 <Avatar className="border-2 border-muted size-20">
-                    <AvatarImage src={avatar_url ?? undefined} className="object-cover" />
-                    <AvatarFallback className="text-xl">{initials}</AvatarFallback>
+                    <AvatarImage
+                        src={avatar_url ?? undefined}
+                        className="object-cover"
+                    />
+                    <AvatarFallback className="text-xl">
+                        {initials}
+                    </AvatarFallback>
                 </Avatar>
                 <div className="text-center">
                     <p className="font-semibold text-sm leading-tight">
                         {nickname ?? full_name ?? "Partner"}
                     </p>
                     {nickname && full_name && (
-                        <p className="text-muted-foreground text-xs">{full_name}</p>
+                        <p className="text-muted-foreground text-xs">
+                            {full_name}
+                        </p>
                     )}
                 </div>
             </div>
@@ -63,13 +71,20 @@ export function PartnerCard({
 
                 <div className="flex flex-wrap gap-2">
                     {birthday && (
-                        <Badge variant="outline" className="flex items-center gap-1.5 font-normal text-sm">
+                        <Badge
+                            variant="outline"
+                            className="flex items-center gap-1.5 font-normal text-sm"
+                        >
                             <Cake className="size-5" />
-                            {birthday}{age !== null && `, ${age} let`}
+                            {birthday}
+                            {age !== null && `, ${age} let`}
                         </Badge>
                     )}
                     {love_language && (
-                        <Badge variant="outline" className="flex items-center gap-1.5 font-normal text-sm">
+                        <Badge
+                            variant="outline"
+                            className="flex items-center gap-1.5 font-normal text-sm"
+                        >
                             <Heart className="size-5 text-rose-400" />
                             {love_language}
                         </Badge>

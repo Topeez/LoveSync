@@ -26,7 +26,11 @@ import {
     CalendarIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
@@ -46,7 +50,7 @@ const ICONS = [
 export function AddMilestoneDialog({ coupleId }: { coupleId: string }) {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedIcon, setSelectedIcon] = useState("heart");
-    const [date, setDate] = useState<Date | undefined>(undefined); // ✅ chyběl state
+    const [date, setDate] = useState<Date | undefined>(undefined);
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -92,11 +96,15 @@ export function AddMilestoneDialog({ coupleId }: { coupleId: string }) {
                                     variant="outline"
                                     className={cn(
                                         "justify-start w-full font-normal text-left",
-                                        !date && "text-muted-foreground"
+                                        !date && "text-muted-foreground",
                                     )}
                                 >
                                     <CalendarIcon className="mr-2 size-4" />
-                                    {date ? format(date, "PPP", { locale: cs }) : <span>Vyberte datum</span>}
+                                    {date ? (
+                                        format(date, "PPP", { locale: cs })
+                                    ) : (
+                                        <span>Vyberte datum</span>
+                                    )}
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="p-0 w-auto">
@@ -126,7 +134,7 @@ export function AddMilestoneDialog({ coupleId }: { coupleId: string }) {
                                             "hover:bg-muted p-2 border rounded-md transition-all",
                                             isSelected
                                                 ? "border-primary bg-primary/10 text-primary"
-                                                : "border-muted text-muted-foreground"
+                                                : "border-muted text-muted-foreground",
                                         )}
                                         title={item.label}
                                     >

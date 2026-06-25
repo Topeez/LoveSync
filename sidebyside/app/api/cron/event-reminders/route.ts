@@ -60,7 +60,7 @@ export async function GET(request: Request) {
             userIds.map((userId) =>
                 sendNotificationToUser(
                     userId,
-                    `📅 ${event.title}`,
+                    ` ${event.title}`,
                     message,
                     "/dashboard",
                     "events",

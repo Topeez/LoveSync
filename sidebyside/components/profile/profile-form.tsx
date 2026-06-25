@@ -135,7 +135,7 @@ export function ProfileForm({ profile }: { profile: Profile }) {
             <form
                 onSubmit={handleSubmit}
                 onChange={markDirty}
-                className="space-y-8 w-full max-w-3xl"
+                className="space-y-8 mx-auto w-full max-w-3xl"
             >
                 <div className="flex items-center gap-6">
                     <div className="relative">

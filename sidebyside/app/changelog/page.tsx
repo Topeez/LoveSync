@@ -15,7 +15,7 @@ export default async function ChangelogPage() {
     const releases = await getReleases();
 
     return (
-        <div className="mx-auto px-4 py-12 max-w-3xl container">
+        <div className="px-4 py-12 cs-container">
             <h1 className="mb-2 font-bold text-4xl tracking-tight">
                 Co je nového
             </h1>

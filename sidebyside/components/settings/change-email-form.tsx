@@ -7,8 +7,11 @@ import ActionButton from "../action-button";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { Check, Loader2 } from "lucide-react";
+import { useUnsavedChanges } from "../unsaved-changes-context";
 
 export function ChangeEmailForm() {
+    const { markDirty, markSaved } = useUnsavedChanges();
+
     const [newEmail, setNewEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [sent, setSent] = useState(false);
@@ -22,7 +25,7 @@ export function ChangeEmailForm() {
         const supabase = createClient();
         const { error } = await supabase.auth.updateUser(
             { email: newEmail },
-            { emailRedirectTo: `${window.location.origin}/auth/callback` }
+            { emailRedirectTo: `${window.location.origin}/auth/callback` },
         );
         setLoading(false);
 
@@ -30,6 +33,7 @@ export function ChangeEmailForm() {
             toast.error("Chyba: " + error.message);
         } else {
             setSent(true);
+            markSaved();
             toast.success("Potvrzovací email odeslán na " + newEmail);
         }
     };
@@ -37,7 +41,8 @@ export function ChangeEmailForm() {
     if (sent) {
         return (
             <div className="bg-primary/10 p-4 rounded-lg text-primary text-sm">
-                <Check className="mr-1"/>Potvrzovací email odeslán na <strong>{newEmail}</strong>.
+                <Check className="mr-1" />
+                Potvrzovací email odeslán na <strong>{newEmail}</strong>.
                 Zkontroluj svou schránku a klikni na odkaz pro potvrzení změny.
             </div>
         );
@@ -52,17 +57,24 @@ export function ChangeEmailForm() {
                     type="email"
                     placeholder="novy@email.cz"
                     value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
+                    onChange={(e) => {
+                        setNewEmail(e.target.value);
+                        markDirty();
+                    }}
                 />
-                <ActionButton onClick={handleChange} disabled={loading}>
-                    {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
-                    Změnit
-                </ActionButton>
             </div>
+            <ActionButton
+                className="mt-2"
+                onClick={handleChange}
+                disabled={loading}
+            >
+                {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
+                Změnit
+            </ActionButton>
             <p className="text-muted-foreground text-xs">
-                Na nový email přijde potvrzovací odkaz. Změna se projeví po potvrzení.
+                Na nový email přijde potvrzovací odkaz. Změna se projeví po
+                potvrzení.
             </p>
         </div>
     );
 }
-

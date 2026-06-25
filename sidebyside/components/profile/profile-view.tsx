@@ -12,11 +12,16 @@ import {
     Shirt,
     Footprints,
     Sparkles,
+    Icon,
+    LayoutDashboard,
 } from "lucide-react";
+import { trousers } from "@lucide/lab";
 import { EditProfileDialog } from "./edit-profile-dialog";
 import React, { useState } from "react";
 import { Profile } from "@/types/profile";
 import { UserNav } from "../dashboard/user-nav";
+import { ThemeToggle } from "../theme-switcher";
+import Link from "next/link";
 
 interface ProfileViewProps {
     profile: Profile;
@@ -44,8 +49,8 @@ export function ProfileView({
         <div className="space-y-4 cs-container">
             {/* --- HLAVIČKA A AKCE --- */}
             <div className="flex md:flex-row-reverse flex-col justify-between items-end gap-4 shadow-sm mb-6 px-6 py-2">
-                {isEditable ? (
-                    <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
+                    {isEditable && (
                         <Button
                             onClick={() => setIsEditDialogOpen(true)}
                             className="inset-shadow-primary-foreground inset-shadow-xs gap-2 shadow-md border-none text-button-text cursor-pointer"
@@ -55,6 +60,20 @@ export function ProfileView({
                                 Upravit údaje
                             </span>
                         </Button>
+                    )}
+                    <Link href={"/dashboard"} aria-label="Zpět na dashboard">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="relative bg-accent shadow-md border border-muted rounded-full text-muted-foreground hover:text-foreground"
+                        >
+                            <LayoutDashboard />
+                        </Button>
+                    </Link>
+                    <div className="hidden md:inline">
+                        <ThemeToggle />
+                    </div>
+                    {isEditable && (
                         <UserNav
                             id={(profile.id as string) || ""}
                             email={profile.email || ""}
@@ -66,10 +85,8 @@ export function ProfileView({
                             }
                             couple_id={hasCouple ? "has-couple" : undefined}
                         />
-                    </div>
-                ) : (
-                    <></>
-                )}
+                    )}
+                </div>
                 <div>
                     <h1 className="font-bold text-2xl md:text-left text-center tracking-tight">
                         {isEditable
@@ -108,7 +125,7 @@ export function ProfileView({
                         @{profile.nickname || "Přezdívka"}
                     </p>
                     {profile.bio && (
-                        <div className="inset-shadow-muted inset-shadow-xs bg-background/80 shadow-sm p-3 border-none rounded-lg max-w-xs text-stone-600 text-sm italic">
+                        <div className="inset-shadow-muted inset-shadow-xs bg-background/80 shadow-sm p-3 border-none rounded-lg max-w-xs text-foregroundD text-sm italic">
                             &quot;{profile.bio}&quot;
                         </div>
                     )}
@@ -142,7 +159,7 @@ export function ProfileView({
                     </div>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <Sparkles className="w-4 h-4 text-orange-500" />
+                            <Sparkles className="size-4 text-primary" />
                             Velikostní tahák
                         </CardTitle>
                     </CardHeader>
@@ -153,7 +170,9 @@ export function ProfileView({
                             value={profile.clothing_size_top}
                         />
                         <SizeItem
-                            icon={<Shirt className="size-4 rotate-180" />} // Kalhoty (hacknutá ikona)
+                            icon={
+                                <Icon iconNode={trousers} className="size-4" />
+                            }
                             label="Kalhoty"
                             value={profile.clothing_size_bottom}
                         />
@@ -227,7 +246,7 @@ function SizeItem({
 }) {
     return (
         <div
-            className={`flex flex-col p-3 border-none shadow-lg inset-shadow-xs inset-shadow-muted rounded-lg border ${highlight ? "bg-orange-50 inset-shadow-orange-50 dark:inset-shadow-orange-900 border-orange-200 dark:bg-orange-950/20 dark:border-orange-900" : "bg-muted/30 border-transparent"}`}
+            className={`flex flex-col p-3 border-none shadow-lg inset-shadow-xs inset-shadow-muted rounded-lg border ${highlight ? "bg-primary/10 inset-shadow-primary/50  border-primary/50" : "bg-muted/30 border-transparent"}`}
         >
             <div className="flex items-center gap-2 mb-1 text-muted-foreground">
                 {icon}
@@ -236,7 +255,7 @@ function SizeItem({
                 </span>
             </div>
             <div
-                className={`text-xl font-bold ${!value && "text-muted-foreground/40 text-sm font-normal"}`}
+                className={`text-xl font-bold ${!value && "text-muted-foreground text-sm font-normal"}`}
             >
                 {value || "Neznámo"}
             </div>

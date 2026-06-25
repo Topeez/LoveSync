@@ -147,7 +147,7 @@ const validated = MilestoneSchema.safeParse({
         const fullName = user.user_metadata.full_name || "Partner";
         await sendNotificationToUser(
             partnerId,
-            "Nový milník! 🏆",
+            "Nový milník!",
             `${fullName} přidal vzpomínku: ${title}`,
             "/dashboard/couple",
             "milestone",
@@ -198,7 +198,7 @@ export async function createBucketItem(formData: FormData): Promise<ActionResult
         const fullName = user.user_metadata.full_name || "Partner";
         await sendNotificationToUser(
             partnerId,
-            "Nový sen do Bucket Listu ✨",
+            "Nový sen do Bucket Listu",
             `${fullName} přidal: ${title}`,
             "/dashboard/couple",
             "bucket_item",
@@ -340,7 +340,7 @@ export async function updateMood(mood: string): Promise<ActionResult> {
         const fullName = user.user_metadata.full_name || "Partner";
         await sendNotificationToUser(
             partnerId,
-            "Nová nálada! 💭",
+            "Nová nálada!",
             `${fullName} sdílel/a svou náladu: ${mood}`,
             "/dashboard",
         );

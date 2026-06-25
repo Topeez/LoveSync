@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import ActionButton from "../action-button";
 import { UnpairButton } from "./unpair-button";
 import { updateRelationshipDate } from "@/app/actions/couple";
+import { useUnsavedChanges } from "../unsaved-changes-context";
 
 interface RelationshipFormProps {
     coupleId: string;
@@ -26,6 +27,8 @@ export function RelationshipForm({
     coupleId,
     initialDate,
 }: RelationshipFormProps) {
+    const { markDirty, markSaved } = useUnsavedChanges();
+
     const [date, setDate] = useState<Date | undefined>(
         initialDate ? new Date(initialDate) : undefined,
     );
@@ -41,7 +44,8 @@ export function RelationshipForm({
         );
 
         if (result.success) {
-            toast.success("Výročí uloženo! ❤️");
+            markSaved();
+            toast.success("Výročí uloženo!");
         } else {
             toast.error("Chyba při ukládání výročí.");
         }
@@ -50,7 +54,7 @@ export function RelationshipForm({
     };
     return (
         <div className="space-y-4">
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 mx-auto w-full max-w-3xl">
                 <label className="peer-disabled:opacity-70 font-medium text-sm leading-none peer-disabled:cursor-not-allowed">
                     Datum začátku vztahu
                 </label>
@@ -76,7 +80,10 @@ export function RelationshipForm({
                             <Calendar
                                 mode="single"
                                 selected={date}
-                                onSelect={setDate}
+                                onSelect={(d) => {
+                                    setDate(d);
+                                    markDirty();
+                                }}
                                 locale={cs}
                             />
                         </PopoverContent>

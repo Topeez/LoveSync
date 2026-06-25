@@ -17,13 +17,23 @@ export default function Footer() {
                     © {new Date().getFullYear()} SideBySide. Všechna práva
                     vyhrazena.
                 </p>
-                <div className="flex justify-center items-center space-x-4 mt-8 h-4 font-semibold text-foreground text-sm leading-6">
+                <div className="flex sm:flex-row flex-col justify-center items-center space-x-4 mt-8 font-semibold text-foreground text-sm leading-6">
                     <Link href="/privacy-policy">
                         Zásady ochrany osobních údajů
                     </Link>
                     <Separator
                         orientation="vertical"
-                        className="bg-foreground"
+                        className="hidden sm:inline bg-foreground h-4"
+                    />
+                    <Link href="/terms-of-service">Podmínky použití</Link>
+                    <Separator
+                        orientation="vertical"
+                        className="hidden sm:inline bg-foreground h-4"
+                    />
+                    <Link href="/cookie-policy">Cookies</Link>
+                    <Separator
+                        orientation="vertical"
+                        className="hidden sm:inline bg-foreground h-4"
                     />
                     <Link href="/changelog">Changelog</Link>
                 </div>

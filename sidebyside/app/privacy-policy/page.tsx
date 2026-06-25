@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function PrivacyPolicy() {
     return (
-        <div className="mx-auto px-4 py-12 max-w-3xl text-foreground container">
+        <div className="px-4 py-12 text-foreground cs-container">
             <h1 className="mb-6 font-bold text-3xl">
                 Zásady ochrany osobních údajů (Privacy Policy)
             </h1>
@@ -40,6 +40,38 @@ export default function PrivacyPolicy() {
                         <li>
                             <strong>Technická data:</strong> Cookies nezbytné
                             pro udržení přihlášení (session).
+                        </li>
+                    </ul>
+                    <h2 className="my-2 font-semibold text-lg">
+                        2b. Zdravotní a citlivé údaje
+                    </h2>
+                    <p>
+                        Aplikace umožňuje ženám volitelně zadat údaje o
+                        menstruačním cyklu (datum poslední menstruace, délka
+                        cyklu). Tato data považujeme za{" "}
+                        <strong>
+                            citlivé osobní údaje zdravotního charakteru
+                        </strong>{" "}
+                        a zpracováváme je s nejvyšší opatrností:
+                    </p>
+                    <ul className="space-y-1 mt-2 pl-5 list-disc">
+                        <li>
+                            Zadání těchto údajů je zcela{" "}
+                            <strong>dobrovolné</strong>.
+                        </li>
+                        <li>
+                            Data jsou viditelná výhradně vám, případně vašemu
+                            partnerovi v aplikaci – a pouze pokud sdílení sami
+                            zapnete.
+                        </li>
+                        <li>
+                            Nejsou sdílena s žádnou třetí stranou, analyzována
+                            ani použita k jiným účelům než k zobrazení v rámci
+                            aplikace.
+                        </li>
+                        <li>
+                            Sdílení s partnerem lze kdykoliv vypnout v nastavení
+                            profilu.
                         </li>
                     </ul>
                 </section>
@@ -104,6 +136,11 @@ export default function PrivacyPolicy() {
                         <li>
                             Úplné smazání vašeho účtu a všech souvisejících dat
                             (fotky, poznámky).
+                        </li>
+                        <li>
+                            Smazání konkrétních citlivých údajů (cyklus) bez
+                            nutnosti smazání celého účtu – v nastavení profilu,
+                            sekce Zdraví & cyklus.
                         </li>
                     </ul>
                     <p className="mt-2">

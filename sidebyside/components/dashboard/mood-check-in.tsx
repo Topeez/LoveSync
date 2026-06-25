@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -131,11 +132,11 @@ export function MoodCheckIn({
         setIsLoading(false);
         if (!result?.success) {
             setCurrentMood(null);
-            toast.error(result.error ?? "Nepodařilo se uložit náladu.");
+            toast.error("Nepodařilo se uložit náladu.");
             return;
         }
 
-        toast.success(result.success ?? "Nálada sdílena! 💌");
+        toast.success("Nálada sdílena!");
     };
 
     return (
@@ -193,9 +194,12 @@ export function MoodCheckIn({
                     </button>
                 </DialogTrigger>
 
-                <DialogContent className="max-w-xs">
+                <DialogContent className="max-w-xs" aria-describedby="mood">
                     <DialogHeader>
                         <DialogTitle>Jak se dnes cítíš?</DialogTitle>
+                        <DialogDescription>
+                            Vyber, jak se dnes cítíš. Uvidíte to jen vy dva.
+                        </DialogDescription>
                     </DialogHeader>
 
                     {/* Partner mood v dialogu — viditelné i na mobilu */}
@@ -233,7 +237,7 @@ export function MoodCheckIn({
                                 )}
                             >
                                 {mood.emoji}
-                                <span className="text-[10px] text-muted-foreground">
+                                <span className="text-muted-foreground text-xs">
                                     {mood.label}
                                 </span>
                             </button>

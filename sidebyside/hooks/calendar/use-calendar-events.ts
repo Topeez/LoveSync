@@ -247,7 +247,7 @@ export function useCalendarEvents({
 
       items.push({
         id: `anniv-${format(next, "yyyy")}`,
-        title: years > 0 ? `Výročí ${years}. rok ❤️` : "Výročí ❤️",
+        title: years > 0 ? `Výročí ${years}. rok` : "Výročí",
         start_time: next.toISOString(),
         end_time: null,
         location: "Oslava?",

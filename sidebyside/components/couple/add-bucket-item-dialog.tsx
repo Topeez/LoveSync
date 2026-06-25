@@ -70,7 +70,7 @@ export function AddBucketItemDialog({ coupleId }: { coupleId: string }) {
             return;
         } else {
             setIsOpen(false);
-            toast.success(result?.success || "Nový sen uložen! 🎉");
+            toast.success(result?.success || "Nový sen uložen!");
         }
     };
 

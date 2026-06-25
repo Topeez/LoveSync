@@ -42,6 +42,10 @@ export default function LandingPage() {
                                 desc="Notifikace na výročí a společné úkoly. Myšlení na detaily nech na nás."
                             />
                         </div>
+
+                        <h2 className="mt-12 font-bold text-2xl sm:text-4xl text-center">
+                            A mnoho dalších funkcí!
+                        </h2>
                     </section>
 
                     <HowItWorks />

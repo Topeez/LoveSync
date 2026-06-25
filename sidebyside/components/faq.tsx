@@ -31,7 +31,7 @@ const faq = [
     {
         icon: MessageCircleHeart,
         question: "Co když se rozejdeme?",
-        answer: 'Věříme, že se to nestane! ❤️ Ale pokud ano, můžete v nastavení profilu zrušit propojení ("Unpair"). Tím se vaše data oddělí a přestanete sdílet nové informace.',
+        answer: 'Věříme, že se to nestane! Ale pokud ano, můžete v nastavení profilu zrušit propojení ("Unpair"). Tím se vaše data oddělí a přestanete sdílet nové informace.',
     },
     {
         icon: HeartHandshake,

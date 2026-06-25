@@ -272,6 +272,11 @@
             transform: scale(1);
         }
     }
+
+    [data-sonner-toaster] [data-type] {
+        color: var(--popover-foreground) !important;
+        background: var(--popover) !important;
+    }
 }
 
 @layer base {

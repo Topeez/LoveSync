@@ -49,7 +49,7 @@ export function UnpairButton({ coupleId }: { coupleId: string }) {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Opravdu se chcete rozejít? 💔
+                        Opravdu se chcete rozejít?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                         Tato akce zruší propojení vašich účtů. Ztratíte přístup

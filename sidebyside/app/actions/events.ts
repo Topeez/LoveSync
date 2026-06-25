@@ -79,7 +79,7 @@ export async function createEvent(formData: FormData): Promise<ActionResult> {
     coupleId,
     userId: user.id,
     fullName,
-    title: `Nová akce: ${title} 📅`,
+    title: `Nová akce: ${title}`,
     message: `${fullName} přidal(a) novou událost. Kdy: ${dateDisplay} v ${startTimeStr}`,
     link: "/dashboard",
     type: "events", 
