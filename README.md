@@ -11,7 +11,7 @@
 
 ## Live Demo
 
-Vyzkoušejte aplikaci živě: **[side-by-side-nu.vercel.app](https://side-by-side-nu.vercel.app)**
+Vyzkoušejte aplikaci živě: **[love-sync-pwa.vercel.app](https://love-sync-pwa.vercel.app)**
 
 ---
 
@@ -50,6 +50,11 @@ Už žádné zapomenuté nákupy nebo úkoly do domácnosti.
 
 - Posílání rychlých zamilovaných vzkazů pro partnera.
 - Plná podpora **Emoji** ve formulářích i výpisu 🫶.
+
+## Zdraví - Sledování menstruačního cyklu partnerky
+
+- Partnerka si může nastavit cyklus a propíše se jí do kalendáře s podbarvením podle fáze cyklu.
+- Partner může sledovat na dashboardu ve vlastním widgetu aktuální fázi cyklu jeho partnerky, počet dnů do další fáze a také tipy jak se má chovat.
 
 ## Personalizace
 
