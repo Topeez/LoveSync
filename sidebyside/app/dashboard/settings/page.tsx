@@ -106,7 +106,9 @@ export default async function SettingsPage() {
                                 <LayoutDashboard />
                             </Button>
                         </GuardedLink>
-                        <ThemeToggleWrapper />
+                        <div className="hidden md:inline">
+                            <ThemeToggleWrapper />
+                        </div>
                         <UserNav
                             id={user.id}
                             email={user.email ?? ""}

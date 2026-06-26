@@ -46,7 +46,9 @@ export function UserNav({
               .slice(0, 2)
         : "JA";
 
-    const fullAvatarUrl = avatar_url?.startsWith("http") ? avatar_url : undefined;
+    const fullAvatarUrl = avatar_url?.startsWith("http")
+        ? avatar_url
+        : undefined;
 
     const hasCouple = !!couple_id;
     const hasProfile = !!id;
@@ -71,18 +73,24 @@ export function UserNav({
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-dvw md:w-100" align="end" forceMount>
+            <DropdownMenuContent
+                className="w-screen xs:w-100"
+                align="end"
+                forceMount
+            >
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex justify-between items-center">
-                      <div className="flex flex-col space-y-1">
-                        <p className="font-medium text-sm leading-none">
-                            Můj Profil
-                        </p>
-                        <p className="text-muted-foreground text-xs leading-none">
-                            {email}
-                        </p>
-                      </div>
-                      <span className="md:hidden"><ThemeToggleWrapper /></span>
+                        <div className="flex flex-col space-y-1">
+                            <p className="font-medium text-sm leading-none">
+                                Můj Profil
+                            </p>
+                            <p className="text-muted-foreground text-xs leading-none">
+                                {email}
+                            </p>
+                        </div>
+                        <span className="md:hidden">
+                            <ThemeToggleWrapper />
+                        </span>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />

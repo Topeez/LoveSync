@@ -33,8 +33,8 @@ export function DeleteAccount() {
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <ActionButton variant="destructive">
-                    <Trash2 className="mr-2 size-4" />
-                    Smazat účet
+                    <Trash2 className="sm:mr-2 size-4" />
+                    <span className="hidden sm:inline">Smazat účet</span>
                 </ActionButton>
             </AlertDialogTrigger>
             <AlertDialogContent>

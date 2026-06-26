@@ -69,7 +69,7 @@ export function PartnerCard({
                     </p>
                 )}
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap justify-center sm:justify-start gap-2">
                     {birthday && (
                         <Badge
                             variant="outline"

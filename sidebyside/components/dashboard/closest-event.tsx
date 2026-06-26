@@ -44,11 +44,11 @@ export function ClosestEvent({
                             {nextEvent.location ? (
                                 <>
                                     {" "}
-                                    <div className="inline-flex items-center gap-1">
+                                    <span className="inline-flex items-center gap-1">
                                         {" "}
                                         <MapPin className="inline-block mb-0.5 size-4 text-destructive" />
                                         {nextEvent.location}
-                                    </div>
+                                    </span>
                                 </>
                             ) : (
                                 ""

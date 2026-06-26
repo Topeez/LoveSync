@@ -54,6 +54,8 @@
     --radius-4xl: calc(var(--radius) + 16px);
 
     --animate-heart: heart-fly-in 1s ease-out both;
+
+    --breakpoint-xs: 26rem;
 }
 
 :root {
