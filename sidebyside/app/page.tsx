@@ -22,21 +22,21 @@ export default function LandingPage() {
                         <div className="gap-8 grid md:grid-cols-3">
                             <FeatureCard
                                 icon={
-                                    <Calendar className="size-10 text-primary" />
+                                    <Calendar className="size-10 text-secondary" />
                                 }
                                 title="Společný kalendář"
                                 desc="Propoj si svůj Google účet s aplikací a vidíš, kdy má partner čas. Už žádné dvojité bookingy."
                             />
                             <FeatureCard
                                 icon={
-                                    <Share2 className="size-10 text-primary" />
+                                    <Share2 className="size-10 text-secondary" />
                                 }
                                 title="Sdílené nápady"
                                 desc="Všechny nápady na dárky, filmy a výlety na jednom místě. Přidej teď, rozhodněte se později."
                             />
                             <FeatureCard
                                 icon={
-                                    <CheckCircle2 className="size-10 text-primary" />
+                                    <CheckCircle2 className="size-10 text-secondary" />
                                 }
                                 title="Žádné zapomínání"
                                 desc="Notifikace na výročí a společné úkoly. Myšlení na detaily nech na nás."

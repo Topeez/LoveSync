@@ -12,14 +12,23 @@ import { Separator } from "../ui/separator";
 import { useFont, FontFamily } from "@/components/font-provider";
 
 const colors: { value: ThemeColor; label: string; colorClass: string }[] = [
-    { value: "default", label: "Výchozí (Sage)", colorClass: "bg-[#8fbc8f]" },
+    {
+        value: "default",
+        label: "Výchozí",
+        colorClass: "dark:bg-[#435376] bg-[#111827]",
+    },
     { value: "rose", label: "Růžová", colorClass: "bg-rose-600" },
     { value: "blue", label: "Modrá", colorClass: "bg-blue-600" },
     { value: "violet", label: "Fialová", colorClass: "bg-violet-600" },
     { value: "orange", label: "Oranžová", colorClass: "bg-orange-500" },
-    { value: "green", label: "Zelená", colorClass: "bg-emerald-500" },
+    {
+        value: "green",
+        label: "Zelená",
+        colorClass: "bg-[#009320] dark:bg-[#00ad26]",
+    },
     { value: "yellow", label: "Žlutá", colorClass: "bg-amber-500" },
     { value: "slate", label: "Šedá", colorClass: "bg-slate-600" },
+    { value: "sage", label: "Šalvějová", colorClass: "bg-[#8fbc8f]" },
 ];
 
 const fonts: { value: FontFamily; label: string; preview: string }[] = [

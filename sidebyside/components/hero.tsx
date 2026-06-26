@@ -27,7 +27,6 @@ export default async function Hero() {
                     squareSize={40}
                     borderColor="--muted"
                     hoverFillColor="#fce7f3"
-
                 />
             </div>
 
@@ -47,7 +46,7 @@ export default async function Hero() {
                 </Badge>
 
                 <h1 className="bg-clip-text bg-linear-to-b from-foreground mt-6 p-2 font-semibold text-transparent text-5xl md:text-6xl lg:text-7xl md:leading-[1.2] tracking-tighter to-accent-foreground">
-                    SideBySide
+                    LoveSync
                 </h1>
                 <p className="mt-6 p-8 font-sans text-foreground md:text-xl">
                     Plánujte společně, žijte lépe. Aplikace pro páry, která
@@ -57,7 +56,7 @@ export default async function Hero() {
                 <div className="flex md:flex-row flex-col justify-center items-center gap-4 mt-12">
                     {user ? (
                         <Link href="/dashboard">
-                            <ActionButton className="gap-2 bg-primary-foreground dark:bg-primary p-4! md:p-6! rounded-full text-md md:text-lg cursor-pointer">
+                            <ActionButton className="gap-2 bg-secondary-foreground dark:bg-primary p-4! md:p-6! rounded-full text-md md:text-lg cursor-pointer">
                                 <LayoutDashboard className="size-4" />
                                 Přejít do aplikace
                             </ActionButton>
@@ -68,7 +67,7 @@ export default async function Hero() {
                         </LoginButton>
                     )}
                     <ActionButton
-                        className="bg-white/50 shadow-none backdrop-blur-sm p-4! md:p-6! border-background rounded-full text-foreground text-md md:text-lg"
+                        className="group bg-white/50 shadow-none backdrop-blur-sm p-4! md:p-6! border-background rounded-full text-foreground text-md md:text-lg"
                         variant="outline"
                         size="lg"
                     >
@@ -76,7 +75,10 @@ export default async function Hero() {
                             href="/changelog"
                             className="flex items-center gap-2"
                         >
-                            <CirclePlay className="size-5" /> Co je nového
+                            <CirclePlay className="size-5 group-hover:text-secondary duration-200 ease-in-out" />{" "}
+                            <span className="group-hover:text-secondary duration-200 ease-in-out">
+                                Co je nového
+                            </span>
                         </Link>
                     </ActionButton>
                 </div>

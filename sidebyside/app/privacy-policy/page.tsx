@@ -14,7 +14,7 @@ export default function PrivacyPolicy() {
                 <section>
                     <h2 className="mb-2 font-semibold text-xl">1. Úvod</h2>
                     <p>
-                        Aplikace <strong>SideBySide</strong> (dále jen
+                        Aplikace <strong>LoveSync</strong> (dále jen
                         &quot;Aplikace) je vyvíjena jako studentský/osobní
                         projekt. Respektujeme vaše soukromí a zavazujeme se
                         chránit veškeré osobní údaje, které s námi sdílíte.

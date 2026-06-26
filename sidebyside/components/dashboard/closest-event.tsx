@@ -24,13 +24,13 @@ export function ClosestEvent({
                 </CardTitle>
                 <CalendarDays className="size-5 text-primary" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="items-center">
                 {nextEvent ? (
                     <>
                         <div className="mb-2 font-bold text-foreground text-3xl">
                             {nextEvent.title}
                         </div>
-                        <p className="mb-6 text-muted-foreground capitalize">
+                        <p className="flex items-center gap-2 mb-6 text-muted-foreground capitalize">
                             {new Date(nextEvent.start_time).toLocaleDateString(
                                 "cs-CZ",
                                 {
@@ -44,8 +44,11 @@ export function ClosestEvent({
                             {nextEvent.location ? (
                                 <>
                                     {" "}
-                                    <MapPin className="inline-block mr-1 size-4 text-destructive" />
-                                    {nextEvent.location}
+                                    <div className="inline-flex items-center gap-1">
+                                        {" "}
+                                        <MapPin className="inline-block mb-0.5 size-4 text-destructive" />
+                                        {nextEvent.location}
+                                    </div>
                                 </>
                             ) : (
                                 ""

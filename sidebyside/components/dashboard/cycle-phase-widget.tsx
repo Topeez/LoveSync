@@ -185,6 +185,9 @@ export function CyclePhaseWidget({
 
                     {/* Odpočet */}
                     <div className="hidden md:flex flex-col justify-center items-center min-w-20 text-center">
+                        <p className="mb-1 text-muted-foreground text-xs leading-tight">
+                            Zhruba
+                        </p>
                         <div
                             className={`text-3xl font-bold leading-none ${config.textClass}`}
                         >

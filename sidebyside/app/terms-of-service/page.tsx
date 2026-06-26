@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-    title: "Podmínky použití - SideBySide",
+    title: "Podmínky použití - LoveSync",
 };
 
 export default function TermsOfService() {
@@ -16,8 +16,8 @@ export default function TermsOfService() {
                 <section>
                     <h2 className="mb-2 font-semibold text-xl">1. Úvod</h2>
                     <p>
-                        Používáním aplikace <strong>SideBySide</strong> (dále
-                        jen &quot;Aplikace&quot;) souhlasíte s těmito podmínkami
+                        Používáním aplikace <strong>LoveSync</strong> (dále jen
+                        &quot;Aplikace&quot;) souhlasíte s těmito podmínkami
                         použití. Aplikace je vyvíjena jako osobní/studentský
                         projekt a je poskytována zdarma a bez záruky.
                     </p>

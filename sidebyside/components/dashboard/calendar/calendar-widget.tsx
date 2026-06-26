@@ -22,7 +22,6 @@ import { useCalendarEvents } from "@/hooks/calendar/use-calendar-events";
 import { CalendarDayCell } from "./calendar-day-cell";
 import { CalendarEventItem } from "./calendar-event-item";
 import { getCyclePhase } from "@/lib/cycle";
-import type { CyclePhase } from "@/lib/cycle";
 
 export function CalendarWidget({
     events = [],
@@ -85,8 +84,9 @@ export function CalendarWidget({
                         isCalendarLayout && "lg:m-4",
                         "rounded-xl!",
                     ),
-                    selected: "text-foreground",
-                    today: "text-primary font-bold rounded-xl",
+                    day_button: cn("data-[selected-single=true]:text-white!"),
+                    selected: "text-white!",
+                    today: "text-foreground! font-bold rounded-xl",
                     outside: "text-muted-foreground opacity-50",
                     disabled: "text-muted-foreground opacity-50",
                     hidden: "invisible",

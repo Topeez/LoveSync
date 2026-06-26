@@ -1,5 +1,5 @@
 export const metadata = {
-    title: "Zásady cookies – SideBySide",
+    title: "Zásady cookies – LoveSync",
 };
 
 export default function CookiePolicy() {

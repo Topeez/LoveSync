@@ -21,12 +21,12 @@ const faq = [
     {
         icon: Sparkles,
         question: "Je aplikace zdarma?",
-        answer: "Základní verze SideBySide je zdarma a obsahuje všechny klíčové funkce jako kalendář, sdílené úkoly a počítadlo výročí. Plánujeme i prémiové funkce pro náročnější páry.",
+        answer: "Základní verze LoveSync je zdarma a obsahuje všechny klíčové funkce jako kalendář, sdílené úkoly a počítadlo výročí. Plánujeme i prémiové funkce pro náročnější páry.",
     },
     {
         icon: Smartphone,
         question: "Funguje to na mobilu?",
-        answer: "Ano! SideBySide je plně responzivní webová aplikace. Můžete si ji také přidat na plochu telefonu a nainstalovat jako webovou aplikaci a je to! Bude se chovat téměř jako nativní aplikace.",
+        answer: "Ano! LoveSync je plně responzivní webová aplikace. Můžete si ji také přidat na plochu telefonu a nainstalovat jako webovou aplikaci a je to! Bude se chovat téměř jako nativní aplikace.",
     },
     {
         icon: MessageCircleHeart,
@@ -50,7 +50,7 @@ const FAQ = () => {
                     Často kladené dotazy
                 </h2>
                 <p className="mt-4 text-muted-foreground text-lg md:text-xl text-center">
-                    Rychlé odpovědi na vše, co vás o SideBySide zajímá.
+                    Rychlé odpovědi na vše, co vás o LoveSync zajímá.
                 </p>
                 <div className="gap-6 grid md:grid-cols-2 mt-12">
                     {faq.map(({ question, answer, icon: Icon }) => (
@@ -58,7 +58,7 @@ const FAQ = () => {
                             className="group bg-card shadow-sm hover:shadow-md p-8 border hover:border-primary/20 rounded-2xl transition-all"
                             key={question}
                         >
-                            <div className="flex justify-center items-center bg-primary/10 rounded-xl w-12 h-12 text-primary group-hover:scale-110 transition-transform duration-300">
+                            <div className="flex justify-center items-center bg-primary/10 rounded-xl w-12 h-12 text-primary group-hover:text-secondary group-hover:scale-110 transition-transform duration-300">
                                 <Icon className="size-6" />
                             </div>
                             <h3 className="mt-6 mb-3 font-semibold text-xl tracking-tight">

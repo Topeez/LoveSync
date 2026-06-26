@@ -1,6 +1,6 @@
 {
-    "name": "SideBySide",
-    "short_name": "SideBySide",
+    "name": "LoveSync",
+    "short_name": "LoveSync",
     "display": "standalone",
     "scope": "/",
     "start_url": "/dashboard",
@@ -20,7 +20,7 @@
             "purpose": "any maskable"
         },
         {
-            "src": "/maskable-icon-512x512.png",
+            "src": "/maskable-icon.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"

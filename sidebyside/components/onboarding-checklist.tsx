@@ -47,7 +47,7 @@ export function OnboardingChecklist({
             {
                 id: "account",
                 label: "Vytvořit účet",
-                description: "Jsi členem SideBySide",
+                description: "Jsi členem LoveSync",
                 done: true,
                 action: null,
             },

@@ -12,9 +12,9 @@ export interface Release {
 }
 
 export async function getReleases(): Promise<Release[]> {
-  // Nahraď 'Topeez' a 'SideBySide' skutečným vlastníkem a názvem repozitáře
+  // Nahraď 'Topeez' a 'LoveSync' skutečným vlastníkem a názvem repozitáře
   const res = await fetch(
-    "https://api.github.com/repos/Topeez/SideBySide/releases",
+    "https://api.github.com/repos/Topeez/LoveSync/releases",
     {
       next: { revalidate: 3600 }, // Cache na 1 hodinu, aby se nepřečerpal limit API
       headers: {

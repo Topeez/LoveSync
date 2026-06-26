@@ -7,7 +7,7 @@ import { cs } from "date-fns/locale";
 import Link from "next/link";
 
 export const metadata = {
-    title: "Changelog | SideBySide",
+    title: "Changelog | LoveSync",
     description: "Historie změn a novinek v aplikaci.",
 };
 
@@ -20,7 +20,7 @@ export default async function ChangelogPage() {
                 Co je nového
             </h1>
             <p className="mb-8 text-muted-foreground">
-                Historie verzí a aktualizací aplikace SideBySide.
+                Historie verzí a aktualizací aplikace LoveSync.
             </p>
 
             <div className="relative space-y-12 ml-3 border-border border-l">

@@ -1,11 +1,23 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { Geist, Geist_Mono, Playfair_Display, Nunito, Inter } from "next/font/google";
+import {
+    Geist,
+    Geist_Mono,
+    Playfair_Display,
+    Nunito,
+    Inter,
+} from "next/font/google";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["latin"] });
+const geistMono = Geist_Mono({
+    variable: "--font-geist-mono",
+    subsets: ["latin"],
+});
+const playfair = Playfair_Display({
+    variable: "--font-playfair",
+    subsets: ["latin"],
+});
 const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
@@ -17,12 +29,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
     title: {
-        default: "SideBySide - Sdílený kalendář a plánování pro páry",
-        template: "%s | SideBySide",
+        default: "LoveSync - Sdílený kalendář a plánování pro páry",
+        template: "%s | LoveSync",
     },
     description:
-        "Zjednodušte si společný život. SideBySide je aplikace pro páry, která nabízí sdílený kalendář, úkoly, nákupní seznamy a prostor pro vaše vzpomínky. Zaregistrujte se zdarma.",
-    applicationName: "SideBySide",
+        "Zjednodušte si společný život. LoveSync je aplikace pro páry, která nabízí sdílený kalendář, úkoly, nákupní seznamy a prostor pro vaše vzpomínky. Zaregistrujte se zdarma.",
+    applicationName: "LoveSync",
     authors: [{ name: "Topeeez", url: "https://topeeez.cz" }],
     keywords: [
         "vztah",
@@ -38,7 +50,7 @@ export const metadata: Metadata = {
     manifest: "/manifest.json",
     appleWebApp: {
         capable: true,
-        title: "SideBySide",
+        title: "LoveSync",
         statusBarStyle: "default",
     },
 
@@ -46,23 +58,23 @@ export const metadata: Metadata = {
         type: "website",
         locale: "cs_CZ",
         url: "https://side-by-side-nu.vercel.app",
-        title: "SideBySide - Sdílený kalendář, úkoly a plánování pro páry",
+        title: "LoveSync - Sdílený kalendář, úkoly a plánování pro páry",
         description:
-            "Zjednodušte si společný život. SideBySide je aplikace pro páry, která nabízí sdílený kalendář, úkoly, nákupní seznamy a prostor pro vaše vzpomínky. Zaregistrujte se zdarma.",
-        siteName: "SideBySide",
+            "Zjednodušte si společný život. LoveSync je aplikace pro páry, která nabízí sdílený kalendář, úkoly, nákupní seznamy a prostor pro vaše vzpomínky. Zaregistrujte se zdarma.",
+        siteName: "LoveSync",
         images: [
             {
                 url: "/og-image.png",
                 width: 1200,
                 height: 630,
-                alt: "SideBySide Aplikace Náhled",
+                alt: "LoveSync Aplikace Náhled",
             },
         ],
     },
 
     twitter: {
         card: "summary_large_image",
-        title: "SideBySide - Aplikace pro páry",
+        title: "LoveSync - Aplikace pro páry",
         description: "Plánujte společně, žijte lépe. Kalendář a úkoly pro dva.",
         images: ["/android-chrome-192x192.png"],
     },

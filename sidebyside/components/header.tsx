@@ -20,25 +20,27 @@ export default async function Header() {
                     className="flex items-center gap-2 font-bold text-foreground text-xl"
                 >
                     <Image
-                        src="/android-chrome-192x192.png"
+                        src="/android-chrome-512x512.png"
                         width={30}
                         height={30}
-                        alt="SideBySide logo"
+                        alt="LoveSync logo"
                     />{" "}
-                    SideBySide
+                    LoveSync
                 </Link>
 
                 <div className="flex items-center gap-3">
                     {user ? (
                         <Link href="/dashboard">
-                            <ActionButton className="gap-2 bg-primary-foreground dark:bg-primary">
+                            <ActionButton className="gap-2 bg-secondary-foreground dark:bg-secondary">
                                 <LayoutDashboard className="size-4" />
                                 Přejít do aplikace
                             </ActionButton>
                         </Link>
                     ) : (
                         <LoginButton>
-                            <span className="hidden md:inline">Přihlásit se přes Google</span>
+                            <span className="hidden md:inline">
+                                Přihlásit se přes Google
+                            </span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 x="0px"

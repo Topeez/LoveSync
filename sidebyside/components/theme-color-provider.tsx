@@ -10,7 +10,8 @@ export type ThemeColor =
     | "orange"
     | "green"
     | "yellow"
-    | "slate";
+    | "slate"
+    | "sage";
 interface ThemeColorContextType {
     themeColor: ThemeColor;
     setThemeColor: (theme: ThemeColor) => void;

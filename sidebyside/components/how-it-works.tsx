@@ -3,12 +3,12 @@
 import { UserPlus, Link2, Palette, CalendarHeart, Heart } from "lucide-react";
 import { useRef } from "react";
 import {
-  m,
-  LazyMotion,
-  domAnimation,
-  useScroll,
-  useTransform,
-  MotionValue,
+    m,
+    LazyMotion,
+    domAnimation,
+    useScroll,
+    useTransform,
+    MotionValue,
 } from "framer-motion";
 
 const steps = [
@@ -55,19 +55,17 @@ function TimelineIcon({
     total: number;
     scrollYProgress: MotionValue<number>;
 }) {
-
     const stepProgress = index / (total - 1);
 
     const scale = useTransform(
         scrollYProgress,
         [stepProgress - 0.08, stepProgress, stepProgress + 0.08],
-        [1, 1.15, 1]
+        [1, 1.15, 1],
     );
-
 
     return (
         <m.div
-            className="top-0 left-4 md:left-8 z-10 absolute flex justify-center items-center bg-primary shadow-sm border-4 border-background rounded-full size-10 md:size-12 text-primary-foreground -translate-x-1/2 will-change-transform"
+            className="top-0 left-4 md:left-8 z-10 absolute flex justify-center items-center bg-secondary shadow-sm border-4 border-background rounded-full size-10 md:size-12 text-primary-foreground -translate-x-1/2 will-change-transform"
             style={{ scale }}
         >
             <Icon className="size-5 md:size-6 text-button-text" />
@@ -89,7 +87,7 @@ export default function HowItWorks() {
         <div className="mx-auto px-6 py-12 md:py-24 max-w-2xl">
             <div className="mb-12 text-center">
                 <h2 className="font-bold text-3xl md:text-4xl tracking-tight">
-                    Jak začít se SideBySide?
+                    Jak začít se LoveSync?
                 </h2>
                 <p className="mt-4 text-muted-foreground text-lg">
                     Pět jednoduchých kroků k lepší organizaci vašeho vztahu.
@@ -106,7 +104,10 @@ export default function HowItWorks() {
                     />
 
                     {steps.map(({ title, description, icon }, index) => (
-                        <div className="relative pb-12 last:pb-0 pl-16" key={index}>
+                        <div
+                            className="relative pb-12 last:pb-0 pl-16"
+                            key={index}
+                        >
                             <TimelineIcon
                                 icon={icon}
                                 index={index}

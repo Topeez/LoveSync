@@ -27,7 +27,7 @@ export default function InviteButton({
 
             if (navigator.share) {
                 await navigator.share({
-                    title: "Připoj se ke mně na SideBySide",
+                    title: "Připoj se ke mně na LoveSync",
                     text: "Plánujme spolu!",
                     url: inviteLink,
                 });
