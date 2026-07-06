@@ -1,8 +1,8 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
-import ActionButton from "./action-button";
+import ActionButton from "@/components/action-button";
 
-export default function LoginButton({
+export default function GoogleLogin({
     nextUrl,
     children,
 }: {

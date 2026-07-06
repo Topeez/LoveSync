@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { getCyclePhase } from "@/lib/cycle";
 import type { CyclePhase } from "@/lib/cycle";
 import { cn } from "@/lib/utils";
@@ -108,7 +108,7 @@ export function CyclePhaseWidget({
 }: CyclePhaseWidgetProps) {
     if (!partnerProfile || partnerProfile.gender !== "female" || !cycle) {
         return (
-            <Card className="inset-shadow-muted inset-shadow-xs bg-card border-none">
+            <Card className="inset-shadow-muted inset-shadow-xs bg-card shadow-lg border-none rounded-xl">
                 <CardContent className="flex items-center gap-4 py-6">
                     <div>
                         <p className="font-medium text-sm">Cyklus partnerky</p>
@@ -199,6 +199,19 @@ export function CyclePhaseWidget({
                     </div>
                 </div>
             </CardContent>
+            {phase === "pms" && (
+                <CardFooter className="flex justify-start items-center">
+                    <div className="inline-flex items-center gap-1.5 text-xs">
+                        <span
+                            className={cn(
+                                "inline-block rounded-full size-2",
+                                config.dotClass,
+                            )}
+                        />
+                        <span>PMS – Premenstruační syndrom</span>
+                    </div>
+                </CardFooter>
+            )}
         </Card>
     );
 }

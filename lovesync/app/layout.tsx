@@ -45,7 +45,7 @@ export const metadata: Metadata = {
         "love note",
         "aplikace pro páry",
     ],
-    metadataBase: new URL("https://side-by-side-nu.vercel.app"),
+    metadataBase: new URL("https://lovesync-pwa.vercel.app"),
 
     manifest: "/manifest.json",
     appleWebApp: {
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     openGraph: {
         type: "website",
         locale: "cs_CZ",
-        url: "https://side-by-side-nu.vercel.app",
+        url: "https://lovesync-pwa.vercel.app",
         title: "LoveSync - Sdílený kalendář, úkoly a plánování pro páry",
         description:
             "Zjednodušte si společný život. LoveSync je aplikace pro páry, která nabízí sdílený kalendář, úkoly, nákupní seznamy a prostor pro vaše vzpomínky. Zaregistrujte se zdarma.",

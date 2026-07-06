@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
                     <h2 className="mb-2 font-semibold text-xl">1. Úvod</h2>
                     <p>
                         Aplikace <strong>LoveSync</strong> (dále jen
-                        &quot;Aplikace) je vyvíjena jako studentský/osobní
+                        &quot;Aplikace&quot;) je vyvíjena jako studentský/osobní
                         projekt. Respektujeme vaše soukromí a zavazujeme se
                         chránit veškeré osobní údaje, které s námi sdílíte.
                     </p>
@@ -28,8 +28,18 @@ export default function PrivacyPolicy() {
                     <ul className="space-y-1 pl-5 list-disc">
                         <li>
                             <strong>Google Účet:</strong> Při přihlášení přes
-                            Google získáváme váš e-mail, jméno a profilovou
-                            fotku (avatar).
+                            Google získáváme váš e-mail přidružený k účtu
+                            Google, jméno a profilovou fotku (avatar).
+                            Upozorňujeme, že tento e-mail se může lišit od
+                            e-mailu, který jste použili k registraci.
+                        </li>
+                        <li>
+                            <strong>Technická metadata:</strong> Náš
+                            poskytovatel autentizace (Supabase) automaticky
+                            zaznamenává čas vytvoření účtu, čas posledního
+                            přihlášení a interní identifikátor vašeho Google
+                            účtu. Tato data slouží výhradně k zajištění
+                            bezpečnosti a správného fungování přihlašování.
                         </li>
                         <li>
                             <strong>Uživatelský obsah:</strong> Data, která do
@@ -42,6 +52,7 @@ export default function PrivacyPolicy() {
                             pro udržení přihlášení (session).
                         </li>
                     </ul>
+
                     <h2 className="my-2 font-semibold text-lg">
                         2b. Zdravotní a citlivé údaje
                     </h2>
@@ -93,6 +104,11 @@ export default function PrivacyPolicy() {
                             K ukládání vašich vzpomínek a plánování v kalendáři.
                         </li>
                         <li>
+                            Technická metadata (časy přihlášení, identifikátory)
+                            jsou uchovávána výhradně pro účely bezpečnosti a
+                            nejsou aktivně monitorována ani zpracovávána.
+                        </li>
+                        <li>
                             <strong>
                                 Nikdy neprodáváme vaše data třetím stranám ani
                                 je nevyužíváme k marketingu.
@@ -107,17 +123,20 @@ export default function PrivacyPolicy() {
                     </h2>
                     <p>
                         Pro provoz aplikace využíváme ověřené služby třetích
-                        stran:
+                        stran, které vystupují jako zpracovatelé vašich dat:
                     </p>
                     <ul className="space-y-1 pl-5 list-disc">
                         <li>
                             <strong>Supabase:</strong> Poskytovatel databáze a
                             autentizace. Data jsou uložena na jejich
-                            zabezpečených serverech.
+                            zabezpečených serverech. Supabase automaticky ukládá
+                            technická metadata spojená s vaším účtem (viz sekce
+                            2).
                         </li>
                         <li>
                             <strong>Google OAuth:</strong> Pro bezpečné
-                            přihlášení.
+                            přihlášení. Google nám předává základní profilové
+                            údaje vašeho Google účtu.
                         </li>
                         <li>
                             <strong>Vercel:</strong> Pro hosting webové
@@ -135,7 +154,7 @@ export default function PrivacyPolicy() {
                         <li>Výpis všech údajů, které o vás evidujeme.</li>
                         <li>
                             Úplné smazání vašeho účtu a všech souvisejících dat
-                            (fotky, poznámky).
+                            (fotky, poznámky, technická metadata).
                         </li>
                         <li>
                             Smazání konkrétních citlivých údajů (cyklus) bez

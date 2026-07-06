@@ -171,7 +171,7 @@ export function ProfileForm({ profile }: { profile: Profile }) {
                     <div>
                         <p className="font-medium text-sm">Profilová fotka</p>
                         <p className="text-muted-foreground text-xs">
-                            JPG, PNG nebo WebP. Max 5 MB.
+                            JPG, PNG nebo WebP. Max 1 MB.
                         </p>
                         <ActionButton
                             type="button"

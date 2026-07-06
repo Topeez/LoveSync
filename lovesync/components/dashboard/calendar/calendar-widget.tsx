@@ -77,7 +77,7 @@ export function CalendarWidget({
                         "rounded-xl w-full font-normal text-muted-foreground text-sm",
                         isCalendarLayout && "md:text-xl",
                     ),
-                    week: "flex w-full mt-2",
+                    week: "flex w-full mt-2 items-stretch",
                     day: cn(
                         "flex flex-col justify-start items-center hover:bg-transparent! p-0 size-full font-normal text-foreground transition-colors",
                         "m-0.5 sm:m-1 lg:m-2",

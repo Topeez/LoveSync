@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import LoginButton from "@/components/login-button";
+import GoogleLogin from "@/components/google-login";
 
 export default async function InvitePage({
     searchParams,
@@ -28,7 +28,7 @@ export default async function InvitePage({
                     Pro přijetí pozvánky se musíš přihlásit.
                 </p>
                 {/* Tady bys ideálně měl dát <LoginButton /> s parametrem redirectTo */}
-                <LoginButton nextUrl={`/invite?code=${code}`} />
+                <GoogleLogin nextUrl={`/invite?code=${code}`} />
             </div>
         );
     }

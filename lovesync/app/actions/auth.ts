@@ -2,7 +2,32 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { PasswordSchema } from "@/lib/schemas";
+import { redirect} from "next/navigation";
 
+export async function signUpWithEmail(email: string, password: string, fullname: string){
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name: fullname,
+      },
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback?next=/dashboard`,
+    }
+  })
+
+  if (error) return { error: error.message };
+  
+  return { success: true };
+}
+
+export async function signInWithEmail(email: string, password: string) {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return { error: error.message };
+    redirect("/dashboard");
+}
 
 export async function updatePassword(prevState: null, formData: FormData) {
   const supabase = await createClient();

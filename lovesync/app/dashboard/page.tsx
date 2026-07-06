@@ -292,11 +292,11 @@ export default async function DashboardPage() {
                 cycle={partnerCycle}
             />
         ) : (
-            <Card className="col-span-12 bg-muted/40 border-none h-full">
+            <Card className="inset-shadow-muted inset-shadow-xs col-span-12 bg-card border-none rounded-xl h-full">
                 <CardContent className="flex justify-center items-center h-24 text-muted-foreground text-sm">
                     {showCycleWidgetForCurrentUser
                         ? "Až partnerka nastaví sdílení cyklu, uvidíš tady přehled fází."
-                        : "Zdraví & cyklus je dostupný jen pro partnerku."}
+                        : "Zdraví & cyklus je dostupný až po spárování."}
                 </CardContent>
             </Card>
         );

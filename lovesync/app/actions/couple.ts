@@ -14,14 +14,14 @@ const MilestoneSchema = z.object({
     description: z.string().optional(),
     date: z.string().min(1, "Datum je povinné"),
     icon: z.string().min(1),
-    coupleId: z.uuid(),
+    coupleId: z.string().uuid(),
 });
 
 const BucketItemSchema = z.object({
   title: z.string().min(1, "Název je povinný"),
-    image_url: z.url("Neplatný formát URL").optional().or(z.literal("")), 
+    image_url: z.string().url("Neplatný formát URL").optional().or(z.literal("")), 
     status: z.enum(["planned", "in_progress", "completed"]),
-    coupleId: z.uuid(),
+    coupleId: z.string().uuid(),
 })
 
 export async function updateRelationshipDate(coupleId: string, date: string): Promise<ActionResult> {

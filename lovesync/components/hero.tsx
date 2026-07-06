@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { getReleases } from "@/lib/github";
 import Squares from "@/components/Squares";
 import ActionButton from "./action-button";
-import LoginButton from "./login-button";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function Hero() {
@@ -62,9 +61,11 @@ export default async function Hero() {
                             </ActionButton>
                         </Link>
                     ) : (
-                        <LoginButton>
-                            Začít zdarma <ArrowUpRight className="size-5" />
-                        </LoginButton>
+                        <Link href={"/register"}>
+                            <ActionButton className="bg-secondary-foreground">
+                                Začít zdarma <ArrowUpRight className="size-5" />
+                            </ActionButton>
+                        </Link>
                     )}
                     <ActionButton
                         className="group bg-white/50 shadow-none backdrop-blur-sm p-4! md:p-6! border-background rounded-full text-foreground text-md md:text-lg"

@@ -117,7 +117,7 @@ export function OnboardingChecklist({
                     <div>
                         <CardTitle className="flex items-center gap-2 text-xl">
                             Vítej na palubě!{" "}
-                            <PartyPopper className="size-5 text-yellow-500" />
+                            <PartyPopper className="size-5 text-secondary" />
                         </CardTitle>
                         <CardDescription>
                             Pár kroků, abys využil aplikaci naplno.

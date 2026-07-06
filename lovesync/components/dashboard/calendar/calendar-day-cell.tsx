@@ -71,16 +71,16 @@ export function CalendarDayCell({
             {hasEvents && (
                 <div
                     className={cn(
-                        "flex flex-col gap-1 mt-1 px-1 w-full",
-                        "md:flex-row md:flex-wrap md:justify-center md:content-start",
+                        "flex gap-1 px-1 w-full",
+                        "flex-wrap justify-center content-start md:gap-1.5",
                     )}
                 >
                     {dayEvents.slice(0, maxDots).map((event, i) => (
                         <div
                             key={i}
                             className={cn(
-                                "shadow-sm rounded-sm w-full h-1.5 transition-all",
-                                "md:size-2 md:rounded-full md:w-2 md:h-2",
+                                "shadow-sm rounded-sm size-1.5 transition-all shrink-0",
+                                "md:size-2 md:rounded-full ",
                                 event.isOptimistic && "opacity-50",
                             )}
                             style={{
@@ -97,8 +97,8 @@ export function CalendarDayCell({
                     {dayEvents.length > maxDots && (
                         <div
                             className={cn(
-                                "bg-muted-foreground/30 rounded-sm w-full h-1.5",
-                                "md:size-2 md:rounded-full md:w-2 md:h-2",
+                                "bg-muted-foreground/30 rounded-sm size-1 shrink-0",
+                                "md:size-2 md:rounded-full",
                             )}
                         />
                     )}
