@@ -3,6 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { SignUpForm } from "@/components/auth/sign-up-form";
 import Image from "next/image";
 import GoogleLogin from "@/components/auth/google-login";
+import { Home } from "lucide-react";
 
 const SignUp = () => (
     <div className="flex justify-center items-center sm:bg-foreground/5 h-screen">
@@ -26,7 +27,7 @@ const SignUp = () => (
                     <Separator />
                 </div>
 
-                <div className="flex sm:flex-row flex-col items-center gap-2">
+                <div className="flex justify-center items-center">
                     <GoogleLogin>
                         Pokračovat pomocí{" "}
                         <svg
@@ -66,6 +67,12 @@ const SignUp = () => (
                     Přihlásit se
                 </Link>
             </p>
+            <span className="flex justify-center items-center gap-1 mt-3 text-muted-foreground text-sm text-center">
+                Zpět na hlavní stránku
+                <Link href="/">
+                    <Home size={20} />
+                </Link>
+            </span>
         </div>
     </div>
 );
