@@ -40,15 +40,14 @@ export async function updateProfile(
 
   if (!validatedFields.success) {
     if (process.env.NODE_ENV === "development") {
-      const tree = z.treeifyError(validatedFields.error);
-      console.log("Validation errors:", tree);
+        console.log("Validation errors:", validatedFields.error.flatten());
     }
 
     return {
-      success: false,
-      error: "Chyba validace: Zkontrolujte zadané údaje.",
+        success: false,
+        error: "Chyba validace: Zkontrolujte zadané údaje.",
     };
-  }
+}
 
   const { error } = await supabase
     .from("profiles")
