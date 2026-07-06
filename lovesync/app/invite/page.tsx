@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import GoogleLogin from "@/components/google-login";
+import GoogleLogin from "@/components/auth/google-login";
 
 export default async function InvitePage({
     searchParams,
