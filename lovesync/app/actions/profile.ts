@@ -3,10 +3,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { ProfileSchema } from "@/lib/schemas";
-import { v4 as uuidv4 } from 'uuid';
 import { DashboardLayoutType } from "@/types/profile";
 import { ActionResult } from "@/types/actions";
-import { z } from "zod";
 
 
 export async function updateProfile(
@@ -126,7 +124,7 @@ export async function updateAvatar(
     return { success: false, error: "Nejste přihlášen." };
   }
 
-  const fileName = `${user.id}/${uuidv4()}.webp`;
+  const fileName = `${user.id}/avatar.webp`;
 
   const { error: uploadError } = await supabase.storage
     .from("avatars")
@@ -144,9 +142,11 @@ export async function updateAvatar(
     data: { publicUrl },
   } = supabase.storage.from("avatars").getPublicUrl(fileName);
 
+  const cacheBustedUrl = `${publicUrl}?v=${Date.now()}`;
+
   const { error: updateProfileError } = await supabase
     .from("profiles")
-    .update({ avatar_url: publicUrl })
+    .update({ avatar_url: cacheBustedUrl })
     .eq("id", user.id);
 
   if (updateProfileError) {

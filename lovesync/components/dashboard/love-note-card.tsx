@@ -149,15 +149,15 @@ export function LoveNoteCard({
                         <Heart className="fill-current size-4" />
                         {isMyNote ? "Tvůj vzkaz" : "Vzkaz pro tebe"}
                     </div>
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <div className="flex items-center gap-1 opacity-100 md:group-hover:opacity-100 md:opacity-0 transition-all duration-300">
                         {!isEmpty && (
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                     <Button
-                                        variant="ghost"
+                                        variant="outline"
                                         size="icon"
                                         disabled={isPending}
-                                        className="hover:bg-transparent size-8 text-secondary hover:text-destructive cursor-pointer"
+                                        className="hover:bg-transparent border-destructive/50 size-8 text-secondary hover:text-destructive cursor-pointer"
                                         title="Smazat vzkaz"
                                     >
                                         <Trash2 className="size-4" />
@@ -189,10 +189,10 @@ export function LoveNoteCard({
                         )}
 
                         <Button
-                            variant="ghost"
+                            variant="outline"
                             size="icon"
                             onClick={() => setIsEditing((prev) => !prev)}
-                            className={`hover:bg-transparent size-8 text-secondary ${isEmpty ? "hover:text-green-400" : "hover:text-amber-400"} cursor-pointer`}
+                            className={`border-secondary/50! size-8 text-secondary ${isEmpty ? "hover:text-green-400" : "hover:text-amber-400"} cursor-pointer`}
                             title={isEmpty ? "Napsat vzkaz" : "Upravit vzkaz"}
                         >
                             {isEmpty ? (

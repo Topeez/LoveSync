@@ -13,6 +13,7 @@ import { DashboardGrid } from "@/components/dashboard/dashboard-grid";
 import { OnboardingChecklist } from "@/components/onboarding-checklist";
 import { EmailChangeNotice } from "@/components/dashboard/email-change-notice";
 import { CyclePhaseWidget } from "@/components/dashboard/cycle-phase-widget";
+import { SimpleUser } from "@/types/todo";
 
 export default async function DashboardPage() {
     const supabase = await createClient();
@@ -45,6 +46,26 @@ export default async function DashboardPage() {
         .eq("user1_id", user.id)
         .is("user2_id", null)
         .maybeSingle();
+
+    let user1Data: SimpleUser = { id: user.id, avatar_url: null };
+    let user2Data: SimpleUser = { id: "", avatar_url: null };
+
+    if (couple && couple.user1_id && couple.user2_id) {
+        // Vezmeme obě ID uživatelů
+        const { data: profiles } = await supabase
+            .from("profiles")
+            .select("id, avatar_url")
+            .in("id", [couple.user1_id, couple.user2_id]);
+
+        if (profiles) {
+            // Najdeme přesné matchování profilů
+            const p1 = profiles.find((p) => p.id === couple.user1_id);
+            const p2 = profiles.find((p) => p.id === couple.user2_id);
+
+            if (p1) user1Data = p1;
+            if (p2) user2Data = p2;
+        }
+    }
 
     const isUser1 = couple?.user1_id === user.id;
     let noteToDisplay = couple?.love_note || "";
@@ -231,7 +252,13 @@ export default async function DashboardPage() {
 
     const todoContent =
         couple && !pendingCouple ? (
-            <TodoList todos={todos} coupleId={couple.id} />
+            <TodoList
+                todos={todos}
+                coupleId={couple?.id}
+                user1={user1Data}
+                user2={user2Data}
+                currentUserId={user?.id}
+            />
         ) : (
             <Card className="inset-shadow-muted inset-shadow-xs col-span-12 md:col-span-4 border-none h-full">
                 <CardHeader>

@@ -13,6 +13,7 @@ import {
     differenceInMonths,
     differenceInYears,
 } from "date-fns";
+import ImageCropperDialog from "./image-cropper-dialog";
 
 interface CoupleHeroProps {
     couple: {
@@ -43,22 +44,30 @@ export default function CoupleHero({ couple, user1, user2 }: CoupleHeroProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isUploading, setIsUploading] = useState(false);
 
+    const [imageToCrop, setImageToCrop] = useState<string | null>(null);
+
     const handleCameraClick = () => {
         fileInputRef.current?.click();
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file) return;
+        if (!file || !file.type.startsWith("image/")) return;
 
         if (!file.type.startsWith("image/")) {
             toast.error("Vyberte prosím obrázek.");
             return;
         }
 
+        const imageUrl = URL.createObjectURL(file);
+        setImageToCrop(imageUrl);
+    };
+
+    const handleCropSave = async (croppedFile: File) => {
         setIsUploading(true);
 
         try {
+            toast.info("Optimalizuji obrázek...");
             // 1. Nastavení možností komprese
             const options = {
                 maxSizeMB: 1, // Cílová velikost (1MB je bohatě dost pro cover)
@@ -68,8 +77,7 @@ export default function CoupleHero({ couple, user1, user2 }: CoupleHeroProps) {
             };
 
             // 2. Samotná komprese
-            toast.info("Optimalizuji obrázek..."); // Volitelné info pro uživatele
-            const compressedFile = await imageCompression(file, options);
+            const compressedFile = await imageCompression(croppedFile, options);
 
             // 3. Vytvoření FormData s komprimovaným souborem
             const formData = new FormData();
@@ -79,6 +87,8 @@ export default function CoupleHero({ couple, user1, user2 }: CoupleHeroProps) {
             await updateCoverPhoto(couple.id, formData);
 
             toast.success("Pozadí aktualizováno!");
+
+            setImageToCrop(null);
         } catch (error) {
             console.error(error);
             toast.error("Nepodařilo se nahrát obrázek.");
@@ -87,6 +97,7 @@ export default function CoupleHero({ couple, user1, user2 }: CoupleHeroProps) {
             if (fileInputRef.current) fileInputRef.current.value = "";
         }
     };
+
     const bgStyle = couple.cover_url
         ? {
               backgroundImage: `url(${couple.cover_url})`,
@@ -120,6 +131,19 @@ export default function CoupleHero({ couple, user1, user2 }: CoupleHeroProps) {
                 className="hidden"
                 accept="image/*"
                 onChange={handleFileChange}
+            />
+
+            <ImageCropperDialog
+                isOpen={!!imageToCrop}
+                imageSrc={imageToCrop}
+                isUploading={isUploading}
+                title="Oříznout pozadí páru"
+                aspectRatio={16 / 9}
+                onClose={() => {
+                    setImageToCrop(null);
+                    if (fileInputRef.current) fileInputRef.current.value = "";
+                }}
+                onCropSave={handleCropSave}
             />
             {/* 1. Pozadí (Cover Image) */}
             <div

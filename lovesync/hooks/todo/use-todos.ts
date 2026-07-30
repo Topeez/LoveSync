@@ -1,18 +1,44 @@
 "use client";
 
-import { useOptimistic, startTransition, useEffect } from "react";
+import { useOptimistic, startTransition, useEffect, useMemo } from "react";
 import { createTodo, toggleTodo, deleteTodo } from "@/app/actions/todos";
 import { toast } from "sonner";
 import { Todo, OptimisticTodoAction, TodoRow } from "@/types/todo";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
 
-export function useTodos(todos: Todo[], coupleId: string) {
+export function useTodos(todos: Todo[], coupleId: string, currentUserId: string, usersMap: Record<string, string | null>) {
+  const initialTodosWithAvatars = useMemo(() => {
+    return (todos ?? []).map(todo => ({
+      ...todo,
+      creator_avatar: todo.created_by ? (usersMap[todo.created_by] ?? null) : null
+    }));
+  }, [todos, usersMap]);
+
   const [optimisticTodos, updateOptimisticTodos] = useOptimistic(
-    todos ?? [],
+    initialTodosWithAvatars,
     (state: Todo[], action: OptimisticTodoAction): Todo[] => {
       switch (action.type) {
         case "ADD":
+          // Kontrola duplicity todo item  
+          if(state.some(t => t.id === action.todo.id || (t.title === action.todo.title && t.is_optimistic))) {
+            const existingOptIdx = state.findIndex(t => t.title === action.todo.title && t.is_optimistic);
+
+            if(existingOptIdx > -1) {
+              const newState = [...state];
+              
+              newState[existingOptIdx] = { 
+                  ...newState[existingOptIdx], 
+                  ...action.todo, 
+                  is_optimistic: false,
+                  creator_avatar: action.todo.creator_avatar || newState[existingOptIdx].creator_avatar 
+              };
+              
+              return newState;
+            }
+            return state;
+          }
+
           return [...state, action.todo];
         case "TOGGLE":
           return state.map((t) =>
@@ -40,6 +66,7 @@ export function useTodos(todos: Todo[], coupleId: string) {
           filter: `couple_id=eq.${coupleId}`,
         },
         (payload: RealtimePostgresChangesPayload<TodoRow>) => {
+
           const newRow = (payload.new as TodoRow | null) ?? undefined;
           const oldRow = (payload.old as TodoRow | null) ?? undefined;
 
@@ -47,12 +74,20 @@ export function useTodos(todos: Todo[], coupleId: string) {
             switch (payload.eventType) {
               case "INSERT":
                 if (!newRow) return;
+
+                //Kontrola puvodniho pole todos jestli tam tento prvek nahodu neni
+                if(todos.some(t => t.id === newRow.id)) return;
+
+                const creatorAvatar = newRow.created_by ? usersMap[newRow.created_by]: undefined;
+
                 updateOptimisticTodos({
                   type: "ADD",
                   todo: {
                     id: newRow.id,
                     title: newRow.title,
                     is_completed: newRow.is_completed,
+                    created_by: newRow.created_by,
+                    creator_avatar: creatorAvatar ?? null
                   },
                 });
                 break;
@@ -80,7 +115,7 @@ export function useTodos(todos: Todo[], coupleId: string) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [coupleId, updateOptimisticTodos]);
+  }, [coupleId, updateOptimisticTodos, todos, usersMap]);
 
   const handleAdd = async (formData: FormData) => {
     const title = (formData.get("title") as string)?.trim();
@@ -91,6 +126,8 @@ export function useTodos(todos: Todo[], coupleId: string) {
       title,
       is_completed: false,
       is_optimistic: true,
+      created_by: currentUserId,
+      creator_avatar: usersMap[currentUserId] ?? null
     };
 
     startTransition(() =>

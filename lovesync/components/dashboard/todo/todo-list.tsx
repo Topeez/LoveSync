@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { Plus, ShoppingBag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,8 +10,22 @@ import { TodoListProps } from "@/types/todo";
 import { useTodos } from "@/hooks/todo/use-todos";
 import { TodoItem } from "./todo-item";
 
-export function TodoList({ todos = [], coupleId }: TodoListProps) {
+export function TodoList({
+    todos = [],
+    coupleId,
+    user1,
+    user2,
+    currentUserId,
+}: TodoListProps) {
     const formRef = useRef<HTMLFormElement>(null);
+
+    // Bezpečné vytvoření slovníku uživatelů
+    const usersMap = useMemo<Record<string, string | null>>(() => {
+        const map: Record<string, string | null> = {};
+        if (user1?.id) map[user1.id] = user1.avatar_url;
+        if (user2?.id) map[user2.id] = user2.avatar_url;
+        return map;
+    }, [user1, user2]);
 
     const {
         optimisticTodos,
@@ -20,7 +34,7 @@ export function TodoList({ todos = [], coupleId }: TodoListProps) {
         handleAdd,
         handleToggle,
         handleDelete,
-    } = useTodos(todos, coupleId);
+    } = useTodos(todos, coupleId, currentUserId, usersMap);
 
     return (
         <Card className="inset-shadow-muted inset-shadow-xs col-span-12 md:col-span-6 lg:col-span-4 bg-card shadow-lg border-none rounded-xl h-full">
@@ -55,6 +69,7 @@ export function TodoList({ todos = [], coupleId }: TodoListProps) {
                                 todo={todo}
                                 onToggle={handleToggle}
                                 onDelete={handleDelete}
+                                currentUserId={currentUserId}
                             />
                         ))
                     )}

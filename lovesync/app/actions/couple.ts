@@ -3,7 +3,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { sendNotificationToUser } from "./push";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { nanoid } from "nanoid";
 import { getPartnerId } from "@/lib/couple-utils";
@@ -70,8 +69,7 @@ export async function updateCoverPhoto(coupleId: string, formData: FormData): Pr
 
     if(imageFile.size > 1 * 1204 * 1024) return { success: false, error: "Soubor je příliš velký. Maximum je 1 MB." };
 
-    const fileExt = imageFile.name.split('.').pop();
-    const fileName = `covers/${coupleId}/${uuidv4()}.${fileExt}`;
+    const fileName = `covers/${coupleId}/cover`;
 
     const { data: couple } = await supabase
       .from("couples")
@@ -84,7 +82,10 @@ export async function updateCoverPhoto(coupleId: string, formData: FormData): Pr
 
     const { error: uploadError } = await supabase.storage
         .from('couple-photos')
-        .upload(fileName, imageFile);
+        .upload(fileName, imageFile, {
+          upsert: true,
+          contentType: imageFile.type
+        });
 
     if (uploadError) {
         console.error("Cover upload error:", uploadError);
@@ -95,9 +96,11 @@ export async function updateCoverPhoto(coupleId: string, formData: FormData): Pr
         .from('couple-photos')
         .getPublicUrl(fileName);
 
+    const cacheBustedUrl = `${publicUrl}?v=${Date.now()}`
+
     await supabase
         .from("couples")
-        .update({ cover_url: publicUrl })
+        .update({ cover_url: cacheBustedUrl })
         .eq("id", coupleId);
 
     revalidatePath("/dashboard/couple");

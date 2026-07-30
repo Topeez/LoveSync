@@ -4,6 +4,12 @@ import { notifyPartner } from "@/lib/couple-utils";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { ActionResult } from "@/types/actions";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export async function createEvent(formData: FormData): Promise<ActionResult> {
   const title = formData.get("title") as string;
@@ -38,15 +44,15 @@ export async function createEvent(formData: FormData): Promise<ActionResult> {
 
   if(!couple) return { success: false, error: "Nemáte oprávnění" }
 
-  const startIso = new Date(`${dateFrom}T${startTimeStr}`).toISOString();
+  const startIso = dayjs.tz(`${dateFrom} ${startTimeStr}`, 'Europe/Prague').toISOString();
   
   let endIso = null;
   
   if (endTimeStr) {
       const endDateBase = dateTo || dateFrom; 
-      endIso = new Date(`${endDateBase}T${endTimeStr}`).toISOString();
+      endIso = dayjs.tz(`${endDateBase} ${endTimeStr}`, 'Europe/Prague').toISOString();
   } else if (dateTo && dateTo !== dateFrom) {
-      endIso = new Date(`${dateTo}T00:00:00`).toISOString();
+      endIso = dayjs.tz(`${dateTo} 00:00:00`, 'Europe/Prague').toISOString();
   }
 
   const { error } = await supabase.from("events").insert({
@@ -107,12 +113,12 @@ export async function updateEvent(eventId: string, formData: FormData): Promise<
     return { success: false, error: "Chybí název nebo datum/čas události." };
   }
 
-  const startIso = new Date(`${dateFrom}T${startTimeStr}`).toISOString();
+  const startIso = dayjs.tz(`${dateFrom} ${startTimeStr}`, 'Europe/Prague').toISOString();
   let endIso: string | null = null;
   if (endTimeStr) {
-      endIso = new Date(`${dateTo || dateFrom}T${endTimeStr}`).toISOString();
+      endIso = dayjs.tz(`${dateTo || dateFrom}T${endTimeStr}`, "Europe/Prague").toISOString();
   } else if (dateTo && dateTo !== dateFrom) {
-      endIso = new Date(`${dateTo}T00:00:00`).toISOString();
+      endIso = dayjs.tz(`${dateTo} 00:00:00`, "Europe/Prague").toISOString();
   }
 
   const { error } = await supabase
